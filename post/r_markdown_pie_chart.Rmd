@@ -1,0 +1,56 @@
+---
+title: "R Markdown in Hugo using Blogdown"
+author: "Oli Bailey"
+date: "2020-09-12"
+categories: ["R"]
+tags: ["R Markdown", "plot", "regression"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+# R Markdown
+
+Throughout my ongoing journey of discovery and learning instatistics and data science , my mainstay computing environment has been the R Studio IDE.
+
+I found initially that it is quite hard to include R markdown output in blogging sites like Wordpress. This led me to create my own website from scratch (in simple HTML,CSS and Javascript) but this rapidly become cumbersome to maintain, even as a static site. So now here I am using Hugo, and Github Pages.
+
+Luckily, the R "blogdown" package by the incredibly smart and prolific developer Yihui Xie allows relatively simple inclusion of notebook scripts in to a blog! Please refer to [this link](https://bookdown.org/yihui/blogdown/a-quick-example.html) for further details and examples of getting R markdown into your blog.
+
+Indeed, this page you are viewing now was written in R Studio as an R markdown document. You can embed an R code chunk as normal, within three backticks, with your chunk options in curly braces, e.g. opening with <code>```{r, cars}</code>
+
+```{r cars}
+summary(cars)
+fit <- lm(dist ~ speed, data = cars)
+fit
+```
+
+and closing with <code>```</code>
+
+# Including Plots
+
+You can also embed plots. The image will be placed in the relevant folder in your Hugo website directory structure by the Blogdown package when you build the Hugo site from within R Studio. Note that you can even caption your figure from within the r chunk header, e.g. `fig.cap='The only pie chart you will ever need...'`
+
+See Figure \@ref(fig:pie) for example:
+
+```{r pie, fig.cap='The only pie chart you will ever need...', tidy=FALSE}
+par(mar = c(0, 1, 0, 1))
+pie(
+  c(280, 60, 20),
+  c('Sky', 'Sunny side of pyramid', 'Shady side of pyramid'),
+  col = c('#0292D8', '#F7EA39', '#C4B632'),
+  init.angle = -50, border = NA
+)
+```
+
+
+# Equation Rendering
+
+This has been another thorny issue when trying to transfer the fruits of one's labour from the R environment to the web: there are so many different ways to render mathematical expressions, e.g. Mathjax, Latex, MathML, etc. 
+
+But within this script, we just use R as normal, by simply enclosing the mathematical expression within $ signs!
+
+$y = a + bx$
+
+$e = mc^2$

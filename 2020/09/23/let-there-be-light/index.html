@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.75.1" />
+
+
+<title>Let there be light! - ThreeFeetDeep</title>
+<meta property="og:title" content="Let there be light! - ThreeFeetDeep">
+
+
+  <link href='threefeetdeep.github.io/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/threefeetdeep.github.io/css/fonts.css" media="all">
+<link rel="stylesheet" href="/threefeetdeep.github.io/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/threefeetdeep.github.io/" class="nav-logo">
+    <img src="/threefeetdeep.github.io/images/logo3.jpg"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="threefeetdeep.github.io/about/">About</a></li>
+    
+    <li><a href="https://github.com/threefeetdeep">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">Let there be light!</h1>
+
+    
+    <span class="article-date">2020-09-23</span>
+    
+
+    <div class="article-content">
+      <p>Needing an outdoor light by our front door, but - despite being an electronics engineer and weirdly averse to, and fearful of 240V mains electricity - I decided to create a custom battery powered Passive-Infrared (PIR) sensor and LED light. This avoided the need for drilling holes from inside to outside, and adding a stub from the indoor lighting mains ring.</p>
+<p>I had a few old car and motorbike batteries spare. One could be re-purposed to power the outdoor light! But 
+we have a north facing front door, ruling out solar powered recharging of a battery. Recharging every 6 months or so wouldn&rsquo;t be too much of a pain, so I designed an analogue circuit to switch the light on when motion is detected by the PIR, whilst only drawing about 0.5mA in &ldquo;standby&rdquo; at night, and much less in the daytime.</p>
+<p>The schematic can be found <a href="../../../../files/let_there_be_light/LTBL_Schematic_v1p0.pdf">here</a>.</p>
+<p>I designed the board to fit into the housing from an old mains-powered PIR, using spare parts I had available at home, like an LM324 quad-Opamp, CD40106 hex Schmitt inverter, and some discrete BJTs and FETs. Of course, it would have been simpler to use a microcontroller, but being a bit old school with a liking for analogue electronics, I decided to do it this way.</p>
+<p>I used the impressive free PCB design tool KiCad. Here&rsquo;s an output from KiCad of the PCB:</p>
+<p><img src="../../../../images/let_there_be_light/LTBL_PCB_3D.jpg" alt="pcb"></p>
+<p>It would be a shame if EVERYTHING new in this world is digital! An inspiring books that&rsquo;s a bit of a &lsquo;modern classic&rsquo; about the spirit of analogue electronics design can be found in the book <a href="https://www.amazon.co.uk/Science-Analog-Circuit-Design-Engineers/dp/0750670622">&ldquo;The art and science of analogue circuit design&rdquo;</a>, edited by a legend of analogue electronics, Jim Williams. The book is worth it for the cover design itself!</p>
+<p><img src="../../../../images/let_there_be_light/jim.jpg" alt="pcb"></p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/threefeetdeep.github.io/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+    
+
+    
+  </body>
+</html>
+

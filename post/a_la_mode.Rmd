@@ -1,0 +1,58 @@
+---
+title: "The Mode in R"
+author: "Oli Bailey"
+date: "2020-08-13"
+categories: ["R"]
+tags: ["R code", "useful"]
+---
+
+<br>
+![image_medium](../../../../images/mode.jpg)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+
+
+When I first started learning R early in 2020, it cames as a bit of a suprise that there were functions in base R for calculating the mean and median, but not the mode. Well, there is a function `mode()`, but it returns the storage mode of an R object!
+
+Of course, the mean only operates on numeric data, as does the R `median()` function. But we could take the mode of a collection of pretty much any objects, numeric, factor, or otherwise.
+
+A few times, I found myself needing a simple function to return the mode. Here are three simple options, first tested on numeric input:
+
+```{r}
+library(magrittr)
+
+my_mode_1 <- function(x) {
+	unique(x)[unique(x) %>% match(x,.) %>% tabulate %>% which.max]
+}
+
+my_mode_2 <- function(x) {
+	unique(x)[which.max(tabulate(match(x,unique(x))))]
+}
+
+my_mode_3 <- function(x) {
+	which.max(sapply(1:max(x), function(n) {length(which(x==n))}))
+}
+```
+
+```{r}
+x <- c(5,5,3,2,4,1,2,5,2)
+
+my_mode_1(x)
+my_mode_2(x)
+my_mode_3(x)
+```
+If there is a tie, the first two functions return the *first* tied value, where the last function usually returns the numerically lower value.
+
+And on factors:
+```{r}
+x <- factor(c("e","d","d","a","e","b","a","b","d","b"))
+
+my_mode_1(x)
+my_mode_2(x)
+# my_mode_3 won't work on factors, as it uses max()
+```
+
+So, next time you need to find the mode in R, grab one of these simple functions :-)

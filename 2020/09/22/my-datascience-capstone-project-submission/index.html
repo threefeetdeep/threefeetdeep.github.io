@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.75.1" />
+
+
+<title>My DataScience Capstone Project Submission - ThreeFeetDeep</title>
+<meta property="og:title" content="My DataScience Capstone Project Submission - ThreeFeetDeep">
+
+
+  <link href='threefeetdeep.github.io/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/threefeetdeep.github.io/css/fonts.css" media="all">
+<link rel="stylesheet" href="/threefeetdeep.github.io/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/threefeetdeep.github.io/" class="nav-logo">
+    <img src="/threefeetdeep.github.io/images/logo3.jpg"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="threefeetdeep.github.io/about/">About</a></li>
+    
+    <li><a href="https://github.com/threefeetdeep">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">My DataScience Capstone Project Submission</h1>
+
+    
+    <span class="article-date">2020-09-22</span>
+    
+
+    <div class="article-content">
+      <p>I recently completed the Coursera / Johns Hopkins University <a href="https://www.coursera.org/specializations/jhu-data-science#courses">&ldquo;Data Science Specialization&rdquo;</a>, a series of ten courses culminating in a Capstone project in which we students had to develop a text-prediction application. This was to be demonstrated in a Shiny App. Below is my &ldquo;promotional slide deck&rdquo; for this text-prediction application. Shiny is a powerful framework for deploying interactive R web apps, but I&rsquo;m still a bit of a noob when it come&rsquo;s to creating a polished app - to be worked upon!</p>
+<h1 id="myword-making-typing-easier-on-smartphones">&ldquo;MyWord!&quot;: Making Typing Easier on Smartphones</h1>
+<p><a href="https://threefeetdeep.shinyapps.io/my_word">MyWord!</a> is a web app demo that accepts typed input and predicts the next word. The target for real-world application is smartphone messaging. This implies limited availability of memory and processing power to run our model in.</p>
+<ul>
+<li>Ease of use: just start typing a sentence, the predicted next word is displayed when typing stops.</li>
+<li>Good user experience: rapid initialization;  next word prediction in less than 0.1 sec.</li>
+<li>Acceptable accuracy: approx. 11-12% (top suggested word, N=700 tests).</li>
+<li>Optional &ldquo;QuadPower&rdquo; mode (using quadgrams) to boost accuracy at expense of slight response time increase</li>
+</ul>
+<h1 id="myword-key-features">&ldquo;MyWord!&rdquo; Key Features</h1>
+<ul>
+<li>Near-instantaneous prediction of next word</li>
+<li>Candidate word list with optional likelihood values</li>
+<li>Very small memory footprint: 
+<!-- raw HTML omitted --> &lt; 3MB on flash/disk 
+<!-- raw HTML omitted --> &lt; 21MB in RAM</li>
+<li>Written in &ldquo;tidyverse&rdquo; style using easily interpretable tibbles - easy for developers to add new features</li>
+</ul>
+<hr>
+<p><img src="../../../../images/my_word_2.png" alt="MyWord"></p>
+<ul>
+<li>
+<!-- raw HTML omitted -->
+</li>
+</ul>
+<h1 id="prediction-algorithm-and-implementation">Prediction Algorithm and Implementation</h1>
+<ul>
+<li>
+<p>The language model consists of 4-, 3-, 2- and 1-gram tables computed from a huge training corpus (1million+ lines of text)</p>
+</li>
+<li>
+<p>The tables are generated based on the conditional probability as follows:</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p>The most recently entered words are matched against model data.</p>
+</li>
+<li>
+<p>The next word prediction is the top item in the table of matches, ordered as most probable first, with a bias to prefer longer n-grams over the shorter.</p>
+</li>
+</ul>
+<h1 id="future-work--references">Future Work &amp; References</h1>
+<ul>
+<li>
+<p>Reduce memory even further using an indexed vocabulary of words, with n-gram tables referencing it using keys</p>
+</li>
+<li>
+<p>Increase response time using data table (as sparse matrices) instead of data frames (this also allow use of keys as above)</p>
+</li>
+<li>
+<p>Add the ability to handle common American-English and British-English spelling variants e.g. colour/color</p>
+</li>
+<li>
+<p>Investigate prediction accuracy improvements using smoothing and interpolation approaches e.g. Kneser-Ney</p>
+</li>
+</ul>
+<p>Code: <a href="https://github.com/threefeetdeep/DataScienceCapstoneProject">Github repo</a>  App: <a href="https://threefeetdeep.shinyapps.io/my_word">MyWord app</a>  Refs: <a href="https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip">Original Corpus</a></p>
+<!-- raw HTML omitted -->
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/threefeetdeep.github.io/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+    
+
+    
+  </body>
+</html>
+

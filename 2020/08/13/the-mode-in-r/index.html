@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.75.1" />
+
+
+<title>The Mode in R - ThreeFeetDeep</title>
+<meta property="og:title" content="The Mode in R - ThreeFeetDeep">
+
+
+  <link href='threefeetdeep.github.io/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/threefeetdeep.github.io/css/fonts.css" media="all">
+<link rel="stylesheet" href="/threefeetdeep.github.io/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/threefeetdeep.github.io/" class="nav-logo">
+    <img src="/threefeetdeep.github.io/images/logo3.jpg"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="threefeetdeep.github.io/about/">About</a></li>
+    
+    <li><a href="https://github.com/threefeetdeep">GitHub</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">2 min read</span>
+    
+
+    <h1 class="article-title">The Mode in R</h1>
+
+    
+    <span class="article-date">2020-08-13</span>
+    
+
+    <div class="article-content">
+      
+
+
+<p><br>
+<img src="../../../../images/mode.jpg" alt="image_medium" /></p>
+<p>When I first started learning R early in 2020, it cames as a bit of a suprise that there were functions in base R for calculating the mean and median, but not the mode. Well, there is a function <code>mode()</code>, but it returns the storage mode of an R object!</p>
+<p>Of course, the mean only operates on numeric data, as does the R <code>median()</code> function. But we could take the mode of a collection of pretty much any objects, numeric, factor, or otherwise.</p>
+<p>A few times, I found myself needing a simple function to return the mode. Here are three simple options, first tested on numeric input:</p>
+<pre class="r"><code>library(magrittr)
+
+my_mode_1 &lt;- function(x) {
+    unique(x)[unique(x) %&gt;% match(x,.) %&gt;% tabulate %&gt;% which.max]
+}
+
+my_mode_2 &lt;- function(x) {
+    unique(x)[which.max(tabulate(match(x,unique(x))))]
+}
+
+my_mode_3 &lt;- function(x) {
+    which.max(sapply(1:max(x), function(n) {length(which(x==n))}))
+}</code></pre>
+<pre class="r"><code>x &lt;- c(5,5,3,2,4,1,2,5,2)
+
+my_mode_1(x)
+## [1] 5
+my_mode_2(x)
+## [1] 5
+my_mode_3(x)
+## [1] 2</code></pre>
+<p>If there is a tie, the first two functions return the <em>first</em> tied value, where the last function usually returns the numerically lower value.</p>
+<p>And on factors:</p>
+<pre class="r"><code>x &lt;- factor(c(&quot;e&quot;,&quot;d&quot;,&quot;d&quot;,&quot;a&quot;,&quot;e&quot;,&quot;b&quot;,&quot;a&quot;,&quot;b&quot;,&quot;d&quot;,&quot;b&quot;))
+
+my_mode_1(x)
+## [1] d
+## Levels: a b d e
+my_mode_2(x)
+## [1] d
+## Levels: a b d e
+# my_mode_3 won&#39;t work on factors, as it uses max()</code></pre>
+<p>So, next time you need to find the mode in R, grab one of these simple functions :-)</p>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/threefeetdeep.github.io/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+
+    
+  </body>
+</html>
+

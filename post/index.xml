@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on ThreeFeetDeep</title>
+    <link>threefeetdeep.github.io/post/</link>
+    <description>Recent content in Posts on ThreeFeetDeep</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 24 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="threefeetdeep.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Horsie to bish three</title>
+      <link>threefeetdeep.github.io/2020/09/24/horsie-to-bish-three/</link>
+      <pubDate>Thu, 24 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/09/24/horsie-to-bish-three/</guid>
+      <description>A few suggestions for punny usernames if you sign up to an online chess site, e.g. chess.com
+ PawnBroker KnightKnight CheckOutOperator CheckThisOut KingHell HorsieToBishThree  The last is my personal favourite, from Red Dwarf Series 2 Episode 5 Queeg vs Holly :-)</description>
+    </item>
+    
+    <item>
+      <title>Let there be light!</title>
+      <link>threefeetdeep.github.io/2020/09/23/let-there-be-light/</link>
+      <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/09/23/let-there-be-light/</guid>
+      <description>Needing an outdoor light by our front door, but - despite being an electronics engineer and weirdly averse to, and fearful of 240V mains electricity - I decided to create a custom battery powered Passive-Infrared (PIR) sensor and LED light. This avoided the need for drilling holes from inside to outside, and adding a stub from the indoor lighting mains ring.
+I had a few old car and motorbike batteries spare.</description>
+    </item>
+    
+    <item>
+      <title>My DataScience Capstone Project Submission</title>
+      <link>threefeetdeep.github.io/2020/09/22/my-datascience-capstone-project-submission/</link>
+      <pubDate>Tue, 22 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/09/22/my-datascience-capstone-project-submission/</guid>
+      <description>I recently completed the Coursera / Johns Hopkins University &amp;ldquo;Data Science Specialization&amp;rdquo;, a series of ten courses culminating in a Capstone project in which we students had to develop a text-prediction application. This was to be demonstrated in a Shiny App. Below is my &amp;ldquo;promotional slide deck&amp;rdquo; for this text-prediction application. Shiny is a powerful framework for deploying interactive R web apps, but I&amp;rsquo;m still a bit of a noob when it come&amp;rsquo;s to creating a polished app - to be worked upon!</description>
+    </item>
+    
+    <item>
+      <title>R Markdown in Hugo using Blogdown</title>
+      <link>threefeetdeep.github.io/2020/09/12/r-markdown-in-hugo-using-blogdown/</link>
+      <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/09/12/r-markdown-in-hugo-using-blogdown/</guid>
+      <description>R MarkdownThroughout my ongoing journey of discovery and learning instatistics and data science , my mainstay computing environment has been the R Studio IDE.
+I found initially that it is quite hard to include R markdown output in blogging sites like Wordpress. This led me to create my own website from scratch (in simple HTML,CSS and Javascript) but this rapidly become cumbersome to maintain, even as a static site.</description>
+    </item>
+    
+    <item>
+      <title>Am I being interfered with?</title>
+      <link>threefeetdeep.github.io/2020/08/22/am-i-being-interfered-with/</link>
+      <pubDate>Sat, 22 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/08/22/am-i-being-interfered-with/</guid>
+      <description>Not a reference to sexual abuse, just an enticing article name to lure you in&amp;hellip;
+This article is inspired by this BBC new article about a village losing their broadband due to an old, and very electrically noisy TV set&amp;hellip;
+I&amp;rsquo;ve spent much of my working life as a practicing RF engineer, and know firsthand just how challenging it can be to troubleshoot these kind of &amp;ldquo;EMC&amp;rdquo;, or electromagnetic compatibility problems.</description>
+    </item>
+    
+    <item>
+      <title>The Mode in R</title>
+      <link>threefeetdeep.github.io/2020/08/13/the-mode-in-r/</link>
+      <pubDate>Thu, 13 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/08/13/the-mode-in-r/</guid>
+      <description>When I first started learning R early in 2020, it cames as a bit of a suprise that there were functions in base R for calculating the mean and median, but not the mode. Well, there is a function mode(), but it returns the storage mode of an R object!
+Of course, the mean only operates on numeric data, as does the R median() function. But we could take the mode of a collection of pretty much any objects, numeric, factor, or otherwise.</description>
+    </item>
+    
+    <item>
+      <title>Bibliography</title>
+      <link>threefeetdeep.github.io/2020/08/03/bibliography/</link>
+      <pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/08/03/bibliography/</guid>
+      <description>It may be a bit square to refer to keep a library of books in this day and age, but I find books to be reassuringly apocalypse-resistant repositories of knowledge, often with far clearer and more understandable explanations than you&amp;rsquo;ll find on most statistics and data science web pages. Here&amp;rsquo;s a small sample of my statistics books:
+ &amp;ldquo;Applied Statistics: Principles and Examples&amp;rdquo; by D.R.Cox and E.J.Snell (Chapman &amp;amp; Hall, 1981) &amp;ldquo;Problem Solving: A Statistician&amp;rsquo;s Guide&amp;rdquo; by C.</description>
+    </item>
+    
+  </channel>
+</rss>

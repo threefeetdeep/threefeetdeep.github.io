@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>electronics on ThreeFeetDeep</title>
+    <link>threefeetdeep.github.io/tags/electronics/</link>
+    <description>Recent content in electronics on ThreeFeetDeep</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 23 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="threefeetdeep.github.io/tags/electronics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Let there be light!</title>
+      <link>threefeetdeep.github.io/2020/09/23/let-there-be-light/</link>
+      <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/09/23/let-there-be-light/</guid>
+      <description>Needing an outdoor light by our front door, but - despite being an electronics engineer and weirdly averse to, and fearful of 240V mains electricity - I decided to create a custom battery powered Passive-Infrared (PIR) sensor and LED light. This avoided the need for drilling holes from inside to outside, and adding a stub from the indoor lighting mains ring.
+I had a few old car and motorbike batteries spare.</description>
+    </item>
+    
+    <item>
+      <title>Am I being interfered with?</title>
+      <link>threefeetdeep.github.io/2020/08/22/am-i-being-interfered-with/</link>
+      <pubDate>Sat, 22 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>threefeetdeep.github.io/2020/08/22/am-i-being-interfered-with/</guid>
+      <description>Not a reference to sexual abuse, just an enticing article name to lure you in&amp;hellip;
+This article is inspired by this BBC new article about a village losing their broadband due to an old, and very electrically noisy TV set&amp;hellip;
+I&amp;rsquo;ve spent much of my working life as a practicing RF engineer, and know firsthand just how challenging it can be to troubleshoot these kind of &amp;ldquo;EMC&amp;rdquo;, or electromagnetic compatibility problems.</description>
+    </item>
+    
+  </channel>
+</rss>
