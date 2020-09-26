@@ -19,40 +19,31 @@ When I first started learning R early in 2020, it cames as a bit of a suprise th
 
 Of course, the mean only operates on numeric data, as does the R `median()` function. But we could take the mode of a collection of pretty much any objects, numeric, factor, or otherwise.
 
-A few times, I found myself needing a simple function to return the mode. Here are three simple options, first tested on numeric input:
+A few times, I found myself needing a simple function to return the mode. Here are a couple  options, first tested on numeric input:
 
 ```{r}
-library(magrittr)
-
 my_mode_1 <- function(x) {
-	unique(x)[unique(x) %>% match(x,.) %>% tabulate %>% which.max]
-}
-
-my_mode_2 <- function(x) {
 	unique(x)[which.max(tabulate(match(x,unique(x))))]
 }
 
-my_mode_3 <- function(x) {
+my_mode_2 <- function(x) {
 	which.max(sapply(1:max(x), function(n) {length(which(x==n))}))
 }
 ```
 
 ```{r}
-x <- c(5,5,3,2,4,1,2,5,2)
+x <- c(6,3,9,6,6,5,9,3)
 
 my_mode_1(x)
 my_mode_2(x)
-my_mode_3(x)
 ```
-If there is a tie, the first two functions return the *first* tied value, where the last function usually returns the numerically lower value.
+note that if there was a tie, the first function returns the *first* tied value, whereas the second function returns the numerically lower value.
 
-And on factors:
+The second function doesn't operate on factors as it uses the max() function, which only works on numeric values:
 ```{r}
-x <- factor(c("e","d","d","a","e","b","a","b","d","b"))
+x <- factor(c("a","a","b","c"))
 
 my_mode_1(x)
-my_mode_2(x)
-# my_mode_3 won't work on factors, as it uses max()
 ```
 
 So, next time you need to find the mode in R, grab one of these simple functions :-)
