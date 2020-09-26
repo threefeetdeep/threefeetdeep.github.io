@@ -3,7 +3,7 @@ title: "R Markdown in Hugo using Blogdown"
 author: "Oli Bailey"
 date: "2020-09-12"
 categories: ["R"]
-tags: ["R Markdown", "plot", "regression"]
+tags: ["blogdown"]
 ---
 
 ```{r setup, include=FALSE}

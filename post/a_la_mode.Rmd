@@ -3,7 +3,7 @@ title: "The Mode in R"
 author: "Oli Bailey"
 date: "2020-08-13"
 categories: ["R"]
-tags: ["R code", "useful"]
+tags: ["R"]
 ---
 
 <br>

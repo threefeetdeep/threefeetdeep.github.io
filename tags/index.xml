@@ -6,58 +6,76 @@
     <description>Recent content in Tags on ThreeFeetDeep</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/threefeetdeep.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/threefeetdeep.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>chess</title>
+      <link>/threefeetdeep.github.io/tags/chess/</link>
+      <pubDate>Thu, 24 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/tags/chess/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>home brew</title>
+      <link>/threefeetdeep.github.io/tags/home-brew/</link>
+      <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/tags/home-brew/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>learning</title>
+      <link>/threefeetdeep.github.io/tags/learning/</link>
+      <pubDate>Tue, 22 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/tags/learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>/threefeetdeep.github.io/tags/r/</link>
+      <pubDate>Tue, 22 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>blogdown</title>
+      <link>/threefeetdeep.github.io/tags/blogdown/</link>
+      <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/tags/blogdown/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>electronics</title>
       <link>/threefeetdeep.github.io/tags/electronics/</link>
-      <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 22 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>/threefeetdeep.github.io/tags/electronics/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>plot</title>
-      <link>/threefeetdeep.github.io/tags/plot/</link>
-      <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
+      <title>RF</title>
+      <link>/threefeetdeep.github.io/tags/rf/</link>
+      <pubDate>Sat, 22 Aug 2020 00:00:00 +0000</pubDate>
       
-      <guid>/threefeetdeep.github.io/tags/plot/</guid>
+      <guid>/threefeetdeep.github.io/tags/rf/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>R Markdown</title>
-      <link>/threefeetdeep.github.io/tags/r-markdown/</link>
-      <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
+      <title>books</title>
+      <link>/threefeetdeep.github.io/tags/books/</link>
+      <pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
       
-      <guid>/threefeetdeep.github.io/tags/r-markdown/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>regression</title>
-      <link>/threefeetdeep.github.io/tags/regression/</link>
-      <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/threefeetdeep.github.io/tags/regression/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R code</title>
-      <link>/threefeetdeep.github.io/tags/r-code/</link>
-      <pubDate>Thu, 13 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/threefeetdeep.github.io/tags/r-code/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>useful</title>
-      <link>/threefeetdeep.github.io/tags/useful/</link>
-      <pubDate>Thu, 13 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/threefeetdeep.github.io/tags/useful/</guid>
+      <guid>/threefeetdeep.github.io/tags/books/</guid>
       <description></description>
     </item>
     

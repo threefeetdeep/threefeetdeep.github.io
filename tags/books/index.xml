@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>books on ThreeFeetDeep</title>
+    <link>/threefeetdeep.github.io/tags/books/</link>
+    <description>Recent content in books on ThreeFeetDeep</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 03 Aug 2020 00:00:00 +0000</lastBuildDate><atom:link href="/threefeetdeep.github.io/tags/books/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bibliography</title>
+      <link>/threefeetdeep.github.io/2020/08/03/bibliography/</link>
+      <pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/2020/08/03/bibliography/</guid>
+      <description>It may be a bit square to refer to keep a library of books in this day and age, but I find books to be reassuringly apocalypse-resistant repositories of knowledge, often with far clearer and more understandable explanations than you&amp;rsquo;ll find on most statistics and data science web pages. Here&amp;rsquo;s a small sample of my statistics books:
+ &amp;ldquo;Applied Statistics: Principles and Examples&amp;rdquo; by D.R.Cox and E.J.Snell (Chapman &amp;amp; Hall, 1981) &amp;ldquo;Problem Solving: A Statistician&amp;rsquo;s Guide&amp;rdquo; by C.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -6,13 +6,49 @@
     <description>Recent content in Categories on ThreeFeetDeep</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 12 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/threefeetdeep.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/threefeetdeep.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>hobbies</title>
+      <link>/threefeetdeep.github.io/categories/hobbies/</link>
+      <pubDate>Thu, 24 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/categories/hobbies/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>electronics</title>
+      <link>/threefeetdeep.github.io/categories/electronics/</link>
+      <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/categories/electronics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>datascience</title>
+      <link>/threefeetdeep.github.io/categories/datascience/</link>
+      <pubDate>Tue, 22 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/categories/datascience/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>R</title>
       <link>/threefeetdeep.github.io/categories/r/</link>
       <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
       
       <guid>/threefeetdeep.github.io/categories/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>general</title>
+      <link>/threefeetdeep.github.io/categories/general/</link>
+      <pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/threefeetdeep.github.io/categories/general/</guid>
       <description></description>
     </item>
     
