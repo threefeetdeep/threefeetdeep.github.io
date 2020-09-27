@@ -1,5 +1,5 @@
 ---
-title: "The Mode in R"
+title: "the mode"
 author: "Oli Bailey"
 date: "2020-08-13"
 categories: ["R"]

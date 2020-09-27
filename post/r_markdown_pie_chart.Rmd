@@ -1,5 +1,5 @@
 ---
-title: "R Markdown in Hugo using Blogdown"
+title: "R markdown in hugo and blogdown"
 author: "Oli Bailey"
 date: "2020-09-12"
 categories: ["R"]
@@ -12,13 +12,13 @@ knitr::opts_chunk$set(collapse = TRUE)
 
 # R Markdown
 
-Throughout my ongoing journey of discovery and learning instatistics and data science , my mainstay computing environment has been the R Studio IDE.
+Throughout my ongoing journey of discovery and learning in statistics and data science , my mainstay computing environment has been the R Studio IDE.
 
-I found initially that it is quite hard to include R markdown output in blogging sites like Wordpress. This led me to create my own website from scratch (in simple HTML,CSS and Javascript) but this rapidly become cumbersome to maintain, even as a static site. So now here I am using Hugo, and Github Pages.
+I found initially that it is quite hard to include R markdown output in blogging sites like WordPress. This led me to create my own website from scratch (in simple HTML,CSS and JavaScript) but this rapidly become cumbersome to maintain, even as a static site. So now here I am using Hugo, and Github Pages.
 
 Luckily, the R "blogdown" package by the incredibly smart and prolific developer Yihui Xie allows relatively simple inclusion of notebook scripts in to a blog! Please refer to [this link](https://bookdown.org/yihui/blogdown/a-quick-example.html) for further details and examples of getting R markdown into your blog.
 
-Indeed, this page you are viewing now was written in R Studio as an R markdown document. You can embed an R code chunk as normal, within three backticks, with your chunk options in curly braces, e.g. opening with <code>```{r, cars}</code>
+Indeed, this page you are viewing now was written in R Studio as an R markdown document. You can embed an R code chunk as normal, within three back ticks, with your chunk options in curly braces, e.g. opening with <code>```{r, cars}</code>
 
 ```{r cars}
 summary(cars)
