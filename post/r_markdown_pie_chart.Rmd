@@ -34,7 +34,7 @@ You can also embed plots. The image will be placed in the relevant folder in you
 
 See Figure \@ref(fig:pie) for example:
 
-```{r pie, fig.cap='The only pie chart you will ever need...', tidy=FALSE}
+```{r pie, fig.width=5.5, fig.cap='The only pie chart you will ever need...', tidy=FALSE}
 par(mar = c(0, 1, 0, 1))
 pie(
   c(280, 60, 20),
@@ -53,4 +53,6 @@ But within this script, we just use R as normal, by simply enclosing the mathema
 
 $y = a + bx$
 
-$e = mc^2$
+$e^{i\pi}+1=0$ 
+
+The latter equation is Euler's Identity, often compared as a mathematical equivalent to a Shakespearean sonnet, and which Richard Feynman called "the most remarkable formula in mathematics".

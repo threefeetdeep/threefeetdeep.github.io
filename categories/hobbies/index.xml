@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>hobbies on ThreeFeetDeep</title>
-    <link>threefeetdeep.github.io/categories/hobbies/</link>
+    <link>/categories/hobbies/</link>
     <description>Recent content in hobbies on ThreeFeetDeep</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 24 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="threefeetdeep.github.io/categories/hobbies/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/hobbies/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>horsie to bish three</title>
-      <link>threefeetdeep.github.io/2020/09/24/horsie-to-bish-three/</link>
+      <link>/2020/09/24/horsie-to-bish-three/</link>
       <pubDate>Thu, 24 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>threefeetdeep.github.io/2020/09/24/horsie-to-bish-three/</guid>
+      <guid>/2020/09/24/horsie-to-bish-three/</guid>
       <description>A few suggestions for punny usernames if you sign up to an online chess site, e.g. chess.com
- PawnBroker KnightKnight CheckOutOperator CheckThisOut KingHell HorsieToBishThree  The last is my personal favourite, from Red Dwarf Series 2 Episode 5 Queeg vs Holly :-)</description>
+ PawnBroker KnightKnight CheckOutOperator CheckThisOut KingHell HorsieToBish3  The last is my personal favourite, from Red Dwarf Series 2 Episode 5 Queeg vs Holly :-)</description>
     </item>
     
   </channel>

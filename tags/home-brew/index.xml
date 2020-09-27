@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>home brew on ThreeFeetDeep</title>
-    <link>threefeetdeep.github.io/tags/home-brew/</link>
+    <link>/tags/home-brew/</link>
     <description>Recent content in home brew on ThreeFeetDeep</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 23 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="threefeetdeep.github.io/tags/home-brew/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 23 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/home-brew/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>let there be light!</title>
-      <link>threefeetdeep.github.io/2020/09/23/let-there-be-light/</link>
+      <link>/2020/09/23/let-there-be-light/</link>
       <pubDate>Wed, 23 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>threefeetdeep.github.io/2020/09/23/let-there-be-light/</guid>
+      <guid>/2020/09/23/let-there-be-light/</guid>
       <description>Needing an outdoor light by our front door, but - despite being an electronics engineer and weirdly averse to, and fearful of 240V mains electricity - I decided to create a custom battery powered Passive-Infrared (PIR) sensor and LED light. This avoided the need for drilling holes from inside to outside, and adding a stub from the indoor lighting mains ring.
 I had a few old car and motorbike batteries spare.</description>
     </item>
