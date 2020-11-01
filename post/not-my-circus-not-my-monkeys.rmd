@@ -1,13 +1,12 @@
 ---
-title: not my circus, not my monkeys
-author: Oli
+title: "not my circus, not my monkeys"
+author: "Oli"
 date: '2020-11-01'
-slug: not-my-circus-not-my-monkeys
-categories:
-  - general
-tags: []
+categories: ["general"]
+tags: ["language"]
+fig_caption: false
 ---
-
+<br>
 ![image_small](../../../../images/circus_monkey.jpg)
 
 My wife is Polish, which means she doesn't mince her words, and can be very direct, issuing requests and commands without the usual English fluff; "Would you mind doing...", "Could you...", "Have you thought about doing...". 
@@ -69,7 +68,7 @@ On the other hand, if a duck's butthole wasn't tight, it would allow the duck to
 
 ||||
 |--|--|--|
-|**Polish:**      |&emsp;|*małe piwo*|  
+|**Polish:**      |&emsp;|*gruszki na wierzbie*|  
 |**Translation:** |&emsp;|pears on a willow tree|
 |**Example:**     |&emsp;|"Do all the housework for a week?|
 |                 |&emsp;|I think he's promising you pears on a willow tree."|
@@ -84,7 +83,7 @@ Promising pears from a willow tree, a fine example of the earthy, rustic imagery
 
 ||||
 |--|--|--|
-|**Polish:**      |&emsp;|*Nie moj cyrk, nie moje małpy*|  
+|**Polish:**      |&emsp;|*Nie mój cyrk, nie moje małpy*|  
 |**Translation:** |&emsp;|not my circus, not my monkeys|
 |**Example:**     |&emsp;|"Tidy up your big, fat mess? Not my cirus, not my monkeys!"|
 |**Equivalents:** |&emsp;|it's not my problem, mate|

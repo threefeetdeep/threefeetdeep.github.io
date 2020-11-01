@@ -62,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">7 min read</span>
+    <span class="article-duration">8 min read</span>
     
 
     <h1 class="article-title">how the humble zx spectrum handled trig</h1>
@@ -75,10 +75,8 @@
       
 
 
-<div class="figure">
-<img src="../../../../images/ZXSpectrum48k.jpg" alt="image_medium" />
-<p class="caption">image_medium</p>
-</div>
+<p><br>
+<img src="../../../../images/ZXSpectrum48k.jpg" alt="image_medium" /></p>
 <div id="the-zx-is-not-a-calculator" class="section level2">
 <h2>The ZX is not a calculator</h2>
 <p>The ZX Spectrum played a big part in my childhood, swallowing up whole chunks of time - hours days weeks at a time - both through gaming, and painstaking programming in assembly language to create incredibly primitive games.</p>
@@ -178,7 +176,7 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 </tr>
 <tr class="even">
 <td>largest positive number</td>
-<td><code>007FFFFFFF</code></td>
+<td><code>017FFFFFFF</code></td>
 <td>1.7014118e+38</td>
 </tr>
 <tr class="odd">
@@ -188,7 +186,7 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 </tr>
 <tr class="even">
 <td>largest negative number</td>
-<td><code>00FFFFFFFF</code></td>
+<td><code>01FFFFFFFF</code></td>
 <td>-1.7014118e+38</td>
 </tr>
 </tbody>
@@ -221,36 +219,32 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 <div id="supported-functions" class="section level2">
 <h2>Supported Functions</h2>
 <p>So now we know how the ZX stored floating point values using a 5-byte format.</p>
-<p>The ZX Spectrum supports the following trigonometric- and exponential-based functions:</p>
-<p><strong>SIN   COS   TAN   ARCSIN   ARCCOS   ARCTAN   LN   EXP   SQRT</strong></p>
-<p>Four of these are “fundamental” functions, used to derive the others:</p>
+<p>The ZX Spectrum supports the following ten trigonometric and exponential functions:</p>
+<p><strong>SIN   COS   TAN   ARCSIN   ARCCOS   ARCTAN   LN   EXP   SQRT</strong>   <strong>POW</strong></p>
+<p>The <strong>ARC</strong> commands are simply the inverse trig functions. <strong>POW</strong> is raising one number to the power of another, and is the only binary operator, with the rest unary.</p>
+<p>Four of these are “fundamental” operators, used to derive the others:</p>
 <p><strong>EXP   LN   SIN   ARCTAN</strong></p>
-<p>The derivations are:</p>
+<p>The derivations for the others are shown below. Some are simple, but quite crafty conversions!</p>
 <p><strong>COS</strong>   <span class="math inline">\(\pm cos(x) = sin(x \pm \pi/2)\)</span></p>
-<p><strong>TAN</strong>   <span class="math inline">\(\pm tan(x) = \frac{sin(x)}{\pm cos(x)} = \frac {sin(x)}{sin( x \pm \pi/2)}\)</span></p>
-<p><strong>ARCSIN</strong>   $sin^{-1}(x) = $</p>
-<p>**</p>
-<div id="taylor-series-approximations" class="section level3">
-<h3>Taylor Series approximations</h3>
-<p>Linear combos of powers of x
-<span class="math inline">\(a + bx + cx^2 + dx^3 +ex^4...\)</span></p>
+<p><strong>TAN</strong>   <span class="math inline">\(\pm tan(x) = \large \frac{sin(x)}{\pm cos(x)} = \large \frac {sin(x)}{sin( x \pm \pi/2)}\)</span></p>
+<p><strong>POW</strong>   <span class="math inline">\(x^y = e^{y \cdot ln(x)} = e^{ln(x^y)}\)</span></p>
+<p><strong>SQRT</strong>   <span class="math inline">\(\sqrt(x) = x^{0.5} = e^{0.5 \times ln(x)}\)</span></p>
+<p><strong>ARCSIN</strong>   <span class="math inline">\(sin^{-1}(x) =\)</span></p>
+<p><strong>ARCCOS</strong></p>
+By using only four operators to derive a total of ten, the Speccy team we’re cleverly able to keep memory usage low, at the cost of slower speed with multiple conversions using only the four “base” operators.
+<hr>
 </div>
-<div id="chebyshev-approximations" class="section level3">
-<h3>Chebyshev approximations</h3>
-<p>Linear combination of Chebyshev polynomials</p>
-<div class="figure">
-<img src="../../../../images/chebyshev_polynomials_graph.png" alt="image_medium" />
-<p class="caption">image_medium</p>
-</div>
-<p>NOTES:</p>
-<p>Range and Accuracy for speccy BASIC trig functions?
-Range and precisiion of sppecy floating point format?
-INtro to speecy floating point format?</p>
-<p>Note that Cheb polys are used for EXP and LN as well…</p>
-<p>Give worked example with plots of SIN</p>
-<p>Series generator Chenyshev polynomials to approximate SIN, ATAN, LN and EXP and hence others derived from this like COS, ACOS, SQRT
-Tn(z) Tn+1(z) etc.
-n = 6 for SIN, 8 for EXP, 12 for decimal/LN/ATAN</p>
+<div id="where-the-magic-happens-chebyshev-approximations" class="section level2">
+<h2>Where the magic happens: Chebyshev Approximations</h2>
+<p>We have just seen how the ZX Spectrum handles ten functions for the price of only four. The question is, how does it actually implement these functions using the simple-minded Z80 CPU and a tiny amount of ROM?</p>
+<p>Step forward the Chebyshev Polynomial Series approximation!!</p>
+<div id="some-theory" class="section level3">
+<h3>Some theory</h3>
+<p>TBD. Intro to Chebyshev polynomial approximation.</p>
+<p>Linear combination of Chebyshev polynomials
+<br>
+<br>
+<img src="../../../../images/chebyshev_polynomials_graph.png" alt="image_medium" /></p>
 <p>Table 1: Chebyshev Polynomials of the First Kind - Recurrence Relation</p>
 <p><span class="math inline">\(T_0(x) = 1 \\ T_1(x) = x \\ T_{n+1}(x) = 2xT_n(x) - T_{n-1}(x)\)</span></p>
 <p>Table 2: Chebyshev Polynomials of the First Kind - Expanded Out</p>
@@ -317,10 +311,6 @@ lapply(sin_coefs,FUN=hex_to_float)</code></pre>
 ## [[6]]
 ## [1] 0.31906974</code></pre>
 </div>
-</div>
-<div id="zx-spectrum-floating-point-range" class="section level2">
-<h2>ZX Spectrum floating point range</h2>
-<p>TBD. What is smallest and largest positive and negative numbers that speecy cna handle in float format? Can it handle 0.000000000 in float?</p>
 <div id="references" class="section level3">
 <h3>References</h3>
 <ul>

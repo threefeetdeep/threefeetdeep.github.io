@@ -13,7 +13,7 @@ tags:
 library(stringr)  # for hex_to_float() function
 ```
 
-
+<br>
 ![image_medium](../../../../images/ZXSpectrum48k.jpg)
 
 ## The ZX is not a calculator
@@ -100,9 +100,9 @@ Using this system, the ZX Spectrum can represent positive and negative numbers w
 | Extreme | &ensp; Hex Form &ensp; | Value |
 |---------|----------|-------|
 |smallest positive number|`FF00000000`|2.93873587706e-39|
-|largest positive number|`007FFFFFFF`|1.7014118e+38|
+|largest positive number|`017FFFFFFF`|1.7014118e+38|
 |smallest negative number|`FF80000000`|5.87747175411e-39|
-|largest negative number|`00FFFFFFFF`|-1.7014118e+38|
+|largest negative number|`01FFFFFFFF`|-1.7014118e+38|
 
 Note that for floating point numbers, the byte B1 representing the exponent cannot take the value `00`. This is a reserved marker indicating that a 16-bit signed integer is actually embedded within the 5-byte format as:
 
@@ -117,51 +117,51 @@ Note that the exact number zero cannot be represented in this floating point for
 ## Supported Functions
 So now we know how the ZX stored floating point values using a 5-byte format.
 
-The ZX Spectrum supports the following trigonometric- and exponential-based functions:
+The ZX Spectrum supports the following ten trigonometric and exponential  functions:
 
-**SIN &ensp; COS &ensp; TAN &ensp; ARCSIN &ensp; ARCCOS &ensp; ARCTAN &ensp; LN &ensp; EXP &ensp; SQRT**
+**SIN &ensp; COS &ensp; TAN &ensp; ARCSIN &ensp; ARCCOS &ensp; ARCTAN &ensp; LN &ensp; EXP &ensp; SQRT**  &ensp; **POW**
 
-Four of these are "fundamental" functions, used to derive the others:
+The **ARC** commands are simply the inverse trig functions. **POW** is raising one number to the power of another, and is the only binary operator, with the rest unary.
+
+Four of these are "fundamental" operators, used to derive the others:
 
 **EXP &ensp; LN &ensp; SIN &ensp; ARCTAN**
 
-The derivations are:
+The derivations for the others are shown below. Some are simple, but quite crafty conversions!
 
 **COS** &emsp; $\pm cos(x) = sin(x \pm \pi/2)$
 
-**TAN** &emsp; $\pm tan(x) = \frac{sin(x)}{\pm cos(x)} = \frac {sin(x)}{sin( x \pm \pi/2)}$
-
-**ARCSIN** &emsp; $sin^{-1}(x) = $
-
-**
+**TAN** &emsp; $\pm tan(x) = \large \frac{sin(x)}{\pm cos(x)} = \large \frac {sin(x)}{sin( x \pm \pi/2)}$
 
 
+**POW** &emsp; $x^y = e^{y \cdot ln(x)} = e^{ln(x^y)}$
 
-### Taylor Series approximations
-Linear combos of powers of x
-$a + bx + cx^2 + dx^3 +ex^4...$
+**SQRT** &emsp; $\sqrt(x) = x^{0.5} = e^{0.5 \times ln(x)}$
+
+**ARCSIN** &emsp; $sin^{-1}(x) =$
+
+**ARCCOS** 
 
 
-### Chebyshev approximations
+By using only four operators to derive a total of ten, the Speccy team we're cleverly able to keep memory usage low, at the cost of slower speed with multiple conversions using only the four "base" operators.
+<hr>
+## Where the magic happens: Chebyshev Approximations
+We have just seen how the ZX Spectrum handles ten functions for the price of only four. The question is, how does it actually implement these functions using the simple-minded Z80 CPU and a tiny amount of ROM?
+
+Step forward the Chebyshev Polynomial Series approximation!!
+
+
+### Some theory
+TBD.  Intro to Chebyshev polynomial approximation.
+
+
+
+
 Linear combination of Chebyshev polynomials
-
+<br>
+<br>
 ![image_medium](../../../../images/chebyshev_polynomials_graph.png)
 
-
-NOTES:
-
-Range and Accuracy for speccy BASIC trig functions?
-Range and precisiion of sppecy floating point format?
-INtro to speecy floating point format?
-
-Note that Cheb polys are used for EXP and LN as well...
-
-Give worked example with plots of SIN
-
-Series generator Chenyshev polynomials to approximate SIN, ATAN, LN and EXP and hence others derived from this like COS, ACOS, SQRT
-Tn(z) Tn+1(z) etc. 
-n = 6 for SIN, 8 for EXP, 12 for decimal/LN/ATAN
- 
 Table 1: Chebyshev Polynomials of the First Kind  - Recurrence Relation
  
 $T_0(x) = 1 \\
@@ -250,9 +250,6 @@ sin_coefs <- list('64e6000000','6c1f0b0000',
 lapply(sin_coefs,FUN=hex_to_float)
 ```
 
-
-## ZX Spectrum floating point range
-TBD. What is smallest and largest positive and negative numbers that speecy cna handle in float format? Can it handle 0.000000000 in float?
 
 
 ### References
