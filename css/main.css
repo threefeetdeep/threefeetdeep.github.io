@@ -1,6 +1,29 @@
 /* Added by O. Bailey */
 img[alt=image_medium] { width: 350px; }
 img[alt=image_small] { width: 200px; }
+
+.smaller_text {
+  font-size: 3px;
+}
+
+table {
+  border-spacing: 5px;
+}
+
+th {
+  background-color: #ded8d3;
+}
+
+tr {
+  background-color: #eff0eb ;
+}
+
+td {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 /*  end of my additions */
 
 html,
@@ -8,6 +31,10 @@ body {
   margin: 0;
   padding: 0;
   position: relative;
+}
+
+head {
+  <meta charset="UTF-8">
 }
 
 body {
@@ -33,6 +60,7 @@ a {
 code {
   background-color: rgba(0, 0, 0, 0.02);
 }
+
 
 .wrapper {
   overflow: hidden;
@@ -96,10 +124,10 @@ code {
 }
 
 .content {
-  max-width: 700px;
+  max-width: 800px;
   margin: 40px auto 10px;
   padding: 0 15px;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.7;
   color: #333;
 }
@@ -145,12 +173,12 @@ code {
 }
 
 .article-content hr {
-  width: 150px;
+  width: 200px;
   margin: 50px auto;
-  height: 1px;
+  height: 2px;
   overflow: hidden;
   border: none;
-  background: #e5e5e5;
+  background: #A0A0A0;
 }
 
 .highlight {

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mathematics on ThreeFeetDeep</title>
+    <link>/categories/mathematics/</link>
+    <description>Recent content in mathematics on ThreeFeetDeep</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 25 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/mathematics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>how the humble zx spectrum handled trig</title>
+      <link>/2020/10/25/how-the-humble-spectrum-handled-trig/</link>
+      <pubDate>Sun, 25 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/2020/10/25/how-the-humble-spectrum-handled-trig/</guid>
+      <description>image_medium
+The ZX is not a calculatorThe ZX Spectrum played a big part in my childhood, swallowing up whole chunks of time - hours days weeks at a time - both through gaming, and painstaking programming in assembly language to create incredibly primitive games.
+As I got older, and became an electronics engineer, this humble little home computer from the 1980’s amazed me more and more as I learnt more about its inner workings.</description>
+    </item>
+    
+  </channel>
+</rss>

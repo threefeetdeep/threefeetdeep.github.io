@@ -13,7 +13,7 @@
       <pubDate>Sat, 12 Sep 2020 00:00:00 +0000</pubDate>
       
       <guid>/2020/09/12/r-markdown-in-hugo-and-blogdown/</guid>
-      <description>R MarkdownThroughout my ongoing journey of discovery and learning in statistics and data science , my mainstay computing environment has been the R Studio IDE.
+      <description>R Markdown Throughout my ongoing journey of discovery and learning in statistics and data science , my mainstay computing environment has been the R Studio IDE.
 I found initially that it is quite hard to include R markdown output in blogging sites like WordPress. This led me to create my own website from scratch (in simple HTML,CSS and JavaScript) but this rapidly become cumbersome to maintain, even as a static site.</description>
     </item>
     
