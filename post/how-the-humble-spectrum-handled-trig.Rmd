@@ -1,8 +1,7 @@
 ---
-title: how the humble zx spectrum handled trig
-author: ojaybee
+title: the zx spectrum and the chebyshev series generator
+author: Oli
 date: '2020-10-25'
-slug: how-the-humble-spectrum-handled-trig
 categories:
   - mathematics
 tags:
@@ -10,18 +9,19 @@ tags:
 ---
 
 ```{r message=FALSE, include=FALSE, load_libs, warning=F}
-library(stringr)  # for hex_to_float() function
+library(stringr)  # for hex conversion routines
 ```
 
 <br>
 ![image_medium](../../../../images/ZXSpectrum48k.jpg)
 
-## The ZX is not a calculator
+## Doing a lot with a little
 The ZX Spectrum played a big part in my childhood, swallowing up whole chunks of time -  hours days weeks at a time - both through gaming, and painstaking programming in assembly language to create incredibly primitive games.
 
-As I got older, and became an electronics engineer, this humble little home computer from the 1980's amazed me more and more as I learnt more about its inner workings. The functionalilty that the ZX Spectrum's creators extracted out of such a limited number of transistors, both in terms of CPU and memory, and low clock speed (3.154MHz) is astounding. 
+As I got older, and became an electronics engineer, this humble little home computer from the 1980's amazed me over and over as I learned more  and more about its inner workings. The functionality that the ZX Spectrum's creators squeezed out of such a limited number of transistors, both in terms of CPU and memory, and low clock speed (3.154MHz) is simply astounding. 
 
-A pocket calculator has one job, to do maths, and has an incredibly specific and customised microchip "brain" for that sole purpose. The ZX spectrum was a low cost, general purpose home computer made from general purpose microchips (ignoring the ULA, but that's another story...), where mathematical manipulation had to be handled with extreme guile and care !
+A pocket calculator has one job - to do maths -  and has an incredibly specific and customized microchip "brain" for that sole purpose. The ZX spectrum was a low cost, kid's home computer made from a general purpose microprocessor and memory chips, where mathematical manipulation had to be handled with extreme guile and care! It's worth mentioning that the other "beating heart" of the ZX Spectrum is the unsing and mysterious Uncommitted Logic Array (ULA), something documented in a fabulous book by [Chris Smith](http://www.zxdesign.info/book/), but the ULA stays well out of this article about the mathematical magic taking place in the ZX Spectrum ROM!
+
 <hr>
 
 ## Z80: Putting the "Z" in "ZX"
@@ -92,6 +92,7 @@ $.11001100\text{_}11001100\text{_}11001100\text{_}11001100$ in binary, and `CC_C
 Since we want to represent *positive* one-tenth, the most significant bit of the manitssa (left-most bit of $m_1$) is set to zero, so we represent +0.1 in five bytes as:
 
 `83_4C_CC_CC_CC`
+<br>
 
 ### Smallest and largest numbers
 
@@ -114,6 +115,8 @@ where $XXYY$ is the two's complement signed 16-bit integer (i.e. in the range -3
 
 Note that the exact number zero cannot be represented in this floating point format, since the matissa must *always* be at least 0.5. Zero is instead represented by an integer padded in the five-byte form as `00FF000000`
 
+<hr>
+
 ## Supported Functions
 So now we know how the ZX stored floating point values using a 5-byte format.
 
@@ -123,54 +126,91 @@ The ZX Spectrum supports the following ten trigonometric and exponential  functi
 
 The **ARC** commands are simply the inverse trig functions. **POW** is raising one number to the power of another, and is the only binary operator, with the rest unary.
 
-Four of these are "fundamental" operators, used to derive the others:
+<br>
+
+### Mathematical Magic #1
+Four of these are "fundamental" operators:
 
 **EXP &ensp; LN &ensp; SIN &ensp; ARCTAN**
 
-The derivations for the others are shown below. Some are simple, but quite crafty conversions!
+The other six operators are defined in terms of these four fundamental operator. Some of these definitions are simple, but some use quite crafty conversions and mathematical identities!
 
 **COS** &emsp; $\pm cos(x) = sin(x \pm \pi/2)$
 
 **TAN** &emsp; $\pm tan(x) = \large \frac{sin(x)}{\pm cos(x)} = \large \frac {sin(x)}{sin( x \pm \pi/2)}$
 
 
-**POW** &emsp; $x^y = e^{y \cdot ln(x)} = e^{ln(x^y)}$
+**POW** &emsp; $x^y = e^{ln(x^y)} = e^{y \times ln(x)}$
 
 **SQRT** &emsp; $\sqrt(x) = x^{0.5} = e^{0.5 \times ln(x)}$
 
-**ARCSIN** &emsp; $sin^{-1}(x) =$
+**ARCSIN** &emsp; $sin^{-1}(x) =2 \times tan^{-1}(\large \frac{x}{\sqrt(1-x^2)})$
 
-**ARCCOS** 
+**ARCCOS**  &emsp; $cos^{-1}(x) = \pi/2 - sin^{-1}(x)$
 
+<br> 
+ 
+Note that the **ARCSIN** calculation uses this form of a half-angle trig identity:
 
-By using only four operators to derive a total of ten, the Speccy team we're cleverly able to keep memory usage low, at the cost of slower speed with multiple conversions using only the four "base" operators.
+$tan(\large \frac{\theta}{2}) = \large \frac{sin(\theta)}{1+cos(\theta)}$
+
+and also uses a Pythagorean identity:
+
+$sin^2(\theta) + cos^2(\theta) = 1$
+
+rearranged to give 
+
+$cos(\theta) = \sqrt(1-sin^2(\theta))$
+
+By using only four operators to derive a total of ten, the ZX Spectrum creators were very cleverly able to keep memory usage down, albeit at the cost of slower speed with multiple conversions using existing routines for the four "base" operators.
+
 <hr>
+
 ## Where the magic happens: Chebyshev Approximations
-We have just seen how the ZX Spectrum handles ten functions for the price of only four. The question is, how does it actually implement these functions using the simple-minded Z80 CPU and a tiny amount of ROM?
+We have just seen how the ZX Spectrum handles ten functions for the price of only four. The question is, how does it actually implement these four functions using the simple-minded Z80 CPU and a tiny amount of ROM?
 
 Step forward the Chebyshev Polynomial Series approximation!!
 
-
-### Some theory
-TBD.  Intro to Chebyshev polynomial approximation.
-
-
-
-
-Linear combination of Chebyshev polynomials
 <br>
-<br>
-![image_medium](../../../../images/chebyshev_polynomials_graph.png)
 
-Table 1: Chebyshev Polynomials of the First Kind  - Recurrence Relation
- 
-$T_0(x) = 1 \\
-T_1(x) = x \\
-T_{n+1}(x) = 2xT_n(x) - T_{n-1}(x)$
- 
- 
-Table 2: Chebyshev Polynomials of the First Kind - Expanded Out
- 
+### Chebyshev, the man.
+![](../../../../images/pafnuty.jfif)
+
+Pafnuty Chebyshev was a Russian mathematician and all-round mega-brain that died shortly before the twentieth century. He has over a dozen mathematical and mechanics related equations, relations, functions and mechanisms named after him. Of particular interest in this article are Chebyshev Polynomials, specifically "of the first kind". 
+
+The mathematics get's a bit heavy, so I'll leave it as a study exercise for the interested reader. There are some well-written resources in the references at the end of this article. Here, we'll just stick to how a truncated series of these polynomials can be used to finely approximate functions like **EXP**, **LN**, **SIN** and **ARCTAN**, allowing the little Speccy to crunch the numbers and allow young programmers like I was to write BASIC programs that drew fractals, circles, ellipses and solve maths homework.
+
+<br>
+
+### Chebyshev, the polynomials.
+In a nut-shell,  Chebyshev polynomials are those that fulfill the relation:
+
+$T_n(x)=cos(ncos^{-1}(x))$
+
+where $n=0,1,2,3,...$ and $T_n(x)$ is the nth "Chebyshev polynomial of the first kind"
+
+The first couple of polynomials are dead easy!
+
+$T_0(x)=cos(0 \times cos^{-1}(x)) = cos(0) = 1$
+
+$T_1(x)=cos(1 \times cos^{-1}(x)) = cos(cos^{-1}(x)) = x$
+
+From the third polnomial onwards, it gets tricky:
+
+$T_2(x)=cos(2 \times cos^{-1}(x)) = ?$
+
+$T_2(x)=cos(3 \times cos^{-1}(x)) = ?!?$
+
+But it turns out that there is a recurrence relation that allows you to compute the (n+1)th polynomial, when you already know the nth and (n-1)th, avoiding all the hard work!
+
+$T_{n+1}(x) = 2\cdot x \cdot T_n(X) - T_{n-1}(x)$
+
+Since we know $T_0(x)$ and $T_1(x)$ already, then:
+
+$T_2(x)= 2 \times x \times T_1(x) -T_0(x) = 2 \times x \times x - 1 = 2x^2-1$ 
+
+and by the same token, we can find $T_3(x)$ and so on. The first twelve Chebyshev polynomials of the first kind are shown below:
+
 $T_0(x) = 1 \\
 T_1(x) = x \\
 T_2(x) = 2x^2 − 1 \\
@@ -181,44 +221,178 @@ T_6(x) = 32x^6 − 48x^4 + 18x^2 − 1 \\
 T_7(x) = 64x^7 − 112x^5 + 56x^3 − 7x \\
 T_8(x) = 128x^8 − 256x^6 + 160x^4 − 32x^12 + 1 \\
 T_9(x) = 256x^9 − 576x^7 + 432x^5 − 120x^3 + 9x \\
-T_10(x) = 512x^{10} − 1280x^8 + 1120x^6 − 400x^4 + 50x^2 − 1 \\
-T11(x) = 1024x^{11} − 2816x^9 + 2816x^7 − 1232x^5 + 220x^3 − 11x$
+T_{10}(x) = 512x^{10} − 1280x^8 + 1120x^6 − 400x^4 + 50x^2 − 1 \\
+T_{11}(x) = 1024x^{11} − 2816x^9 + 2816x^7 − 1232x^5 + 220x^3 − 11x$
+
+The first five polynomials look like this:
+<br>
+![](../../../../images/chebyshev_polynomials_graph.png)
+
+These polynomials have many interesting properties, but what we care about is that over the range $-1 \leq x \leq +1$, we can very closely approximate *some other* function as a linear combination of the first few Chebyshev polynomials.
+
+To put this another way, by adding together certain scaled "amounts" of the first few polynomials, we get an overall function that looks a lot like, say, the **SIN** function for example. To express this mathematically:
+
+$f(x) \approx \sum_{n=0}^{n=k}A_nT_n(x)$
+
+where $A_n$ is a simple scalar coefficient that "scales" how much of each $T_n(x)$ to add together.
+
+This is very much like Fourier synthesis, in which any repetitive waveform can be "built up" from various differing amounts of harmonically related single frequencies. 
+
+In our case, we want $f(x)=sin(x)$, and since we know what each $T_n(x)$, up to $n=11$ in the above list, then if only we could find out what each number $A_n$ is, then we could approximate **SIN** as some simple sum of say the first $k+1$ polynomials, i.e.:
+
+$sin(x) \approx A_0T_0(x) + ... + A_kT_k(x)$ 
+
+Since each $T_n(x)$ is just some polynomial in powers of x, we can add up all the "amounts" of each power of x, and end up with coefficients, say $a$:
+
+$sin(x) \approx a_0 \cdot x^0 + a_1 \cdot x^1 + a_2 \cdot x^2 + .... + a_k \cdot x^k = a_0 + a_1x + a_2x^2 + .... + a_kx^k$
+
+Going back a step, again, skipping the derivations which you can find else where, the coefficients $A_n$ can be found using:
+
+$A_0 = \large \frac{1}{\pi} \int_{-1}^{+1} \large \frac{f(x)dx}{\sqrt(1-x^2)}$
+
+and for $n=1,2,3...k$ as
+
+$A_n = \large \frac{2}{\pi}\int_{-1}^{1} \large \frac{f(x)T_n(x)dx}{\sqrt(1-x^2)}$
+
+### Scaling in $x$
+Before we get carried away and launch in to some number crunching, we have to bear in mind that the approximations above work only over the range $-1 \leq x \leq +1$. Outside this, the approximation fall apart, and the sum of polynomials will not "follow" or mimic our chosen funtion $f(x)$ anymore.
+
+Scaling to the rescue! For our chosen **SIN** function, we can compress the full range of **SIN** from say $-\pi/2 \leq x \leq \pi/2$ to our desired $-1 \leq x' \leq +1$ if we let $x \rightarrow x'$ where $x'=(\pi /2) \cdot x$. 
 
 
-Table 3: Powers of x as functions of $T_n(x)$
+```{r echo=FALSE, fig.width=8}
+x <- seq(-pi/2,pi/2, by=pi/50)
+x_p <- seq(-1,1,by=1/50)
+plot(x,sin(x), type="l", col="blue", lwd=2, 
+     main="compressing sin(x) to sin(x')",
+     xlab="x",
+     ylab="sin()")
+lines(x_p,sin(pi*x_p/2), col="red", lwd=2)
+abline(v=-1, col="pink", lty=2)
+abline(v=1, col="pink", lty=2)
+abline(v=-pi, col="lightblue", lty=2)
+abline(v=pi, col="lightblue", lty=2)
+legend(-3, 0.75, legend=c("sin(x)", "sin(x')"),
+       col=c("blue", "red"), lty=1, cex=1.2)
+```
 
-$\\1 = T_0 \\
-x = T_1 \\
-x^2 = \frac{1}{2}(T_0 + T_2) \\
-x^3 = \frac{1}{4}(3T_1 + T_3) \\
-x^4 = \frac{1}{8}(3T_0 + 4T_2 + T_4) \\
-x^5 = \frac{1}{16}(10T_1 + 5T_3 + T_5) \\
-x^6 = \frac{1}{32}(10T_0 + 15T_2 + 6T_4 + T_6) \\
-x^7 = \frac{1}{64}(35T_1 + 21T_3 + 7T_5 + T_7) \\
-x^8 = \frac{1}{128}(35T_0 + 56T_2 + 28T_4 + 8T_6 + T_8) \\
-x^9 = \frac{1}{256}(126T_1 + 84T_3 + 36T_5 + 9T_7 + T_9) \\
-x^{10} = \frac{1}{512}(126T_0 + 210T_2 + 120T_4 + 45T_6 + 10T_8 + T_{10}) \\
-x^{11} = \frac{1}{1024}(462T_1 + 330T_3 + 165T_5 + 55T_7 + 11T_9 + T_{11})$
+
+###  Approximating **SIN**
+
+Now we'll use the above two equations for the coefficients $A_n$ to put R to wor, doing a numerical integration for us to find these coefficients to approximate the **SIN** function, i.e. $f(x)=sin(x)$. We'll do this for $n$ up to 5 to start with.
+
+Remembering that $T_0(x) = 1$, then $A_0$ says how much "offset" or for the electrical/electronics engineers out there, how much "DC" we want in our composite of polynomials. **SIN** over full cycles has an average of zero, or no offset or "DC" component, so we may expect $A_0$ to be zero. Let's find out...
+
+```{r, find_A_for_sine}
+n = 0
+f = sin
+A = rep(0,6)
+
+# define the polynomials
+T0 = 1
+T1 <- function(x) x
+T2 <- function(x) 2*x^2-1
+T3 <- function(x) 4*x^3-3*x
+T4 <- function(x) 8*x^4-8*x^2+1
+T5 <- function(x) 16*x^5 -20*x^3 + 5*x
+
+Tn=list(T0,T1,T2,T3,T4,T5)
+
+# find A_0 first
+integrand <- function(x) {sin(pi*x/2)/sqrt(1-x^2)}
+A[1] = (1/pi)*integrate(integrand, lower=-1, upper=1)$value
+
+# loop to compute rest of A_n
+for (i in 1:5) {
+  integrand <- function(x) {sin(pi*x)*Tn[[i+1]](x)/sqrt(1-x^2)}
+  A[i+1] = (2/pi)*integrate(integrand, lower=-1, upper=1)$value
+}
+
+# show coefficients
+A
+```
+
+
+
+
+
+
+### Precomputed computations in the ROM
+TBD
+how the speccy uses the precomputed coeffiecients (12,8,6,12) for EXP,LN,SIN,ARCTAN
+how the speccy handles the range of the function to keep the approximation valid? -1 to +1???
+
+
+
+
+
+
 
 
 Here's a simple function to the hex format as stored in memory to the floating point number it represents:
-```{r, conversion_functions}
+```{r eval=FALSE, include=FALSE}
 hex_to_float <- function(hex_in) {
-  # strip exponent
+  # strip first byte as exponent
   exponent <- as.integer(as.hexmode(str_sub(hex_in,1,2)))
   
-  # strip mantissa (as 16-bit chunks; as.hexmode() range limits!)
+  # strip last four bytes as mantissa, but in two-byte chunks
+  # because as.hexmode() range limited to 16-bits
   mantissa_high <- as.integer(as.hexmode(str_sub(hex_in,3,6)))
   mantissa_low <- as.integer(as.hexmode(str_sub(hex_in,7,10)))
+  # combine to four bytes
   mantissa <- mantissa_low + 2^16*mantissa_high
   
-  # mantissa sign (most significant bit of four bytes)
+  # get sign most significant bit of mantissa
   msign <- 1*(mantissa_high <= 2^15)
   
-  # calculate output float
+  # calculate output float, handling the sign in the mantissa
   (2*msign-1) * 2^(128-exponent) * (mantissa+2^31*msign)/2^32
 }
 
+float_to_hex <- function(float_in) {
+  sign <-  0
+  # can't handle zero
+  if (float_in == 0.0) stop("can't handle zero in float_to_hex()")
+  # take out sign
+  if (float_in < 0) {
+    sign <- 1
+  }
+  
+  # convert input in powers of ten of powers of two
+  exp <- floor(log2(10) * log10(float_in)) + 1
+  
+  # create fractional mantissa part
+  mantissa <- 2^(32-exp)*float_in
+  
+  if (sign == 0) {
+    # set MSB to be zero for positive
+    mantissa <- mantissa - 2^31
+  }
+
+  exp_hex <- int_to_hex(exp, 1)
+  mantissa_hex <- int_to_hex(mantissa, 4)
+  return(paste0(exp_hex,mantissa_hex))
+}
+
+
+int_to_hex <- function(i, n) {
+  # needed to handle large ints as R can only handle 16-bits
+  # n is number of bytes to output (masked from lowest)
+  high_word <- floor(i/2^16)
+  low_word <- i - high_word * 2^16
+  
+  high_hex <- format(as.hexmode(high_word), width=4)
+  low_hex <- format(as.hexmode(low_word), width=4)
+  
+  combined <- paste0(high_hex, low_hex)
+  N <- str_length(combined)
+  start_idx <- ifelse(N - 2*n + 1 < 1,1,N - 2*n + 1)
+  end_idx <- N
+  return(str_sub(combined,start_idx, end_idx))
+}
+``` 
+
+```{r eval=FALSE, include=FALSE}
 # 0.1
 hex_to_float("834CCCCCCC")
 
@@ -240,24 +414,36 @@ hex_to_float("01FFFFFFFF")
 hex_to_float("81490FDAA2")
 
 ```
-
+```{r, test_float_to_hex}
+#float_to_hex(pi)
+#float_to_hex(-1.7014118e+38)
+#float_to_hex(1.7014118e+38)
+```
 
 The spectrum ROM uses these coefficients for the Chebyshev polynomial approximation, stored in ROM at 0x37BE to 0x37D6:
-```{r}
+```{r eval=FALSE, include=FALSE}
 sin_coefs <- list('64e6000000','6c1f0b0000',
                   '738f38ee00','791563bb23',
                   '7e920dcded','81235d1bea')
-lapply(sin_coefs,FUN=hex_to_float)
+
+format(lapply(sin_coefs,FUN=hex_to_float), scientific = T)
+
+
 ```
 
 
 
 ### References
 
-* The disassembled ZX Spectrum ROM can be found [here](https://skoolkid.github.io/rom/asm/05E3.html)
+* The disassembled ZX Spectrum ROM can be found [here](https://skoolkid.github.io/rom/)
 
 * A Z80 CPU datasheet can be found [here](http://www.zilog.com/docs/z80/um0080.pdf)
 
 *  Chapter 24 of the ZX Spectrum [manual](https://worldofspectrum.org/ZXBasicManual/zxmanchap24.html) which covers the floating point and integer number format representation in memory, near the page bottom.
 
+* An [article](https://aip.scitation.org/doi/pdf/10.1063/1.4823278) from "Computers in Physics" 1994 that includes an approximation exmaple for $e^x$
+
+* The [Wikipedia](https://en.wikipedia.org/wiki/Chebyshev_polynomials) page on Chebyshev Polynomials is a good starting point
+
 * A very interesting [article](https://www.embeddedrelated.com/showarticle/152.php) about using the Chebyshev approximation in CPU-power constrained embedded systems
+

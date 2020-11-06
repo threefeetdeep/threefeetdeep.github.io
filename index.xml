@@ -18,13 +18,13 @@ Despite this directness of language, it turns out that the Poles have some wonde
     </item>
     
     <item>
-      <title>how the humble zx spectrum handled trig</title>
-      <link>/2020/10/25/how-the-humble-spectrum-handled-trig/</link>
+      <title>the zx spectrum and the chebyshev series generator</title>
+      <link>/2020/10/25/the-zx-spectrum-and-the-chebyshev-series-generator/</link>
       <pubDate>Sun, 25 Oct 2020 00:00:00 +0000</pubDate>
       
-      <guid>/2020/10/25/how-the-humble-spectrum-handled-trig/</guid>
-      <description>The ZX is not a calculatorThe ZX Spectrum played a big part in my childhood, swallowing up whole chunks of time - hours days weeks at a time - both through gaming, and painstaking programming in assembly language to create incredibly primitive games.
-As I got older, and became an electronics engineer, this humble little home computer from the 1980’s amazed me more and more as I learnt more about its inner workings.</description>
+      <guid>/2020/10/25/the-zx-spectrum-and-the-chebyshev-series-generator/</guid>
+      <description>Doing a lot with a littleThe ZX Spectrum played a big part in my childhood, swallowing up whole chunks of time - hours days weeks at a time - both through gaming, and painstaking programming in assembly language to create incredibly primitive games.
+As I got older, and became an electronics engineer, this humble little home computer from the 1980’s amazed me over and over as I learned more and more about its inner workings.</description>
     </item>
     
     <item>
@@ -113,7 +113,8 @@ Of course, the mean only operates on numeric data, as does the R median() functi
       <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>My name is Oli Bailey, an electronics engineer living and working in the south of England. Since 2018-2019 or so, I&amp;rsquo;ve become interested in machine learning, data science and statistics, so I set up this site to document my learning process. I&amp;rsquo;m also very interested as a lay &amp;ldquo;armchair scientist spectator&amp;rdquo; in the latest theories on the origin of life on earth (i.e. the first replicating structures, the RNA-World hypothesis, protocells, self-assembly of primitive cellular molecules, etc.</description>
+      <description>My name is Oli Bailey, an electronics engineer living and working in the south of England. Since 2018-2019 or so, I&amp;rsquo;ve become interested in machine learning, data science and statistics, so I set up this site to document my learning process. I also post other random stuff here too&amp;hellip;
+I&amp;rsquo;m also very interested as a lay &amp;ldquo;armchair scientist spectator&amp;rdquo; in the latest theories on the origin of life on earth (i.</description>
     </item>
     
   </channel>

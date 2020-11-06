@@ -2,20 +2,21 @@
 img[alt=image_medium] { width: 350px; }
 img[alt=image_small] { width: 200px; }
 
-.smaller_text {
-  font-size: 3px;
-}
 
 table {
   border-spacing: 5px;
+  table-layout: auto;
+  width: 100%;
 }
 
 th {
   background-color: #ded8d3;
+  text-align: left;
 }
 
 tr {
   background-color: #eff0eb ;
+  text-align: left;
 }
 
 td {
@@ -23,6 +24,8 @@ td {
   padding-right: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
+  text-align: left;
+  vertical-align: top;
 }
 /*  end of my additions */
 
@@ -59,6 +62,11 @@ a {
 
 code {
   background-color: rgba(0, 0, 0, 0.02);
+  font-size: 16px;
+}
+
+.fs18 {
+  font-size: 18px;
 }
 
 

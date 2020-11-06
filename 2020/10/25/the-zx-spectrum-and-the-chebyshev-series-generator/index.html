@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.75.1" />
+
+
+<title>the zx spectrum and the chebyshev series generator - ThreeFeetDeep</title>
+<meta property="og:title" content="the zx spectrum and the chebyshev series generator - ThreeFeetDeep">
+
+
+  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+
+
+
+  
+
+
+
+
+
+
+
+
+<link href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css' rel='stylesheet' type='text/css' />
+
+
+
+<link rel="stylesheet" href="/css/fonts.css" media="all">
+<link rel="stylesheet" href="/css/main.css" media="all">
+
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/logo3.jpg"
+         width="50"
+         height="50"
+         alt="Logo">
+  </a>
+
+  <ul class="nav-links">
+    
+    <li><a href="/about/">about</a></li>
+    
+    <li><a href="https://github.com/threefeetdeep">github</a></li>
+    
+    <li><a href="/tags/">tags</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">11 min read</span>
+    
+
+    <h1 class="article-title">the zx spectrum and the chebyshev series generator</h1>
+
+    
+    <span class="article-date">2020-10-25</span>
+    
+
+    <div class="article-content">
+      
+
+
+<p><br>
+<img src="../../../../images/ZXSpectrum48k.jpg" alt="image_medium" /></p>
+<div id="doing-a-lot-with-a-little" class="section level2">
+<h2>Doing a lot with a little</h2>
+<p>The ZX Spectrum played a big part in my childhood, swallowing up whole chunks of time - hours days weeks at a time - both through gaming, and painstaking programming in assembly language to create incredibly primitive games.</p>
+<p>As I got older, and became an electronics engineer, this humble little home computer from the 1980’s amazed me over and over as I learned more and more about its inner workings. The functionality that the ZX Spectrum’s creators squeezed out of such a limited number of transistors, both in terms of CPU and memory, and low clock speed (3.154MHz) is simply astounding.</p>
+<p>A pocket calculator has one job - to do maths - and has an incredibly specific and customized microchip “brain” for that sole purpose. The ZX spectrum was a low cost, kid’s home computer made from a general purpose microprocessor and memory chips, where mathematical manipulation had to be handled with extreme guile and care! It’s worth mentioning that the other “beating heart” of the ZX Spectrum is the unsing and mysterious Uncommitted Logic Array (ULA), something documented in a fabulous book by <a href="http://www.zxdesign.info/book/">Chris Smith</a>, but the ULA stays well out of this article about the mathematical magic taking place in the ZX Spectrum ROM!</p>
+<hr>
+</div>
+<div id="z80-putting-the-z-in-zx" class="section level2">
+<h2>Z80: Putting the “Z” in “ZX”</h2>
+<p>The digital, integer-number-crunching heart of the the ZX Spectrum is the 8-bit Zilog Z80 microprocessor, or CPU. In terms of the raw mathematical ability, it can:</p>
+<ul>
+<li>add or subtract 8- and 16-bit integers</li>
+<li>multiply or divide 8- or 16-bit integers by powers of 2</li>
+</ul>
+<p>and that is pretty much it! No dedicated floating point unit, no hardware multipliers, no maths co-processor.</p>
+<p>So the question is, how does such a simple home computer using a CPU with such basic mathematical abilities perform quite precise floating-point trigonometrical functions like sine, and arctangent?</p>
+</div>
+<div id="every-byte-counts" class="section level2">
+<h2>Every byte counts</h2>
+<p>The Z80 could address 64kB of memory. The ZX Spectrum has 48kB of RAM. In the remaining 16kB, the ZX Specrum had to cram the entire operating system, which included:</p>
+<ul>
+<li>reset/restart tables</li>
+<li>tables of constants e.g. pixel maps for characters.</li>
+<li>keyboard handling of key presses, scanned at 50Hz</li>
+<li>loudspeaker routines to make beeps at precise frequencies</li>
+<li>cassette handling for loading and saving data</li>
+<li>screen and printer output handling</li>
+<li>BASIC interpreter routines</li>
+<li>expression evaluation routines</li>
+<li>arithmetic routines</li>
+<li>floating point calculator</li>
+</ul>
+Every single byte in ROM mattered. This becomes an important consideration when looking at how the humble speccy handled trigonometrical and exponential functions.
+<hr>
+</div>
+<div id="floating-point-numbers-in-spectrum-land" class="section level2">
+<h2>Floating-point numbers in Spectrum-Land</h2>
+<p>It is worth a brief description of how the ZX Spectrum stored floating point numbers in memory. They were stored using five bytes.</p>
+<p>Any number (except 0) can be written uniquely as:</p>
+<p><span class="math inline">\(\pm mantissa \times 2^{e}\)</span></p>
+<p>In the ZX Spectrum, <span class="math inline">\(mantissa\)</span> is made up of the four bytes <span class="math inline">\(m_1\)</span> to <span class="math inline">\(m_4\)</span>, expressed as a fractional integer, as illustrated here using only four bits after the decimal point The ZX Spectrum uses 32 bits.</p>
+<div class="figure">
+<img src="../../../../images/fractional_binary.gif" alt="" />
+<p class="caption">image_medium</p>
+</div>
+<p>The Spectrum ROM code assumes that the left-most (most-significant) bit of the mantissa would be a one, with a value of 0.5. This allows this bit to be re-purposed to indicate the sign of the number being encoded, with 0 meaning positive, and 1 meaning negative.</p>
+<p>The mantissa then represents a number between 0.5 and <em>almost</em> 1 (in fact, about 0.99999999976716936)</p>
+<p>The exponent <span class="math inline">\(e\)</span> in the Spectrum implementation uses one byte to represent an integer exponent in the range -127 to +127, stored by subtracting <span class="math inline">\(e\)</span> from 128 (hex <code>80</code>).</p>
+<p>These five bytes are stored in the Spectrum memory in this form:</p>
+<table>
+<thead>
+<tr class="header">
+<th>  B1  </th>
+<th>B2</th>
+<th>B3</th>
+<th>B4</th>
+<th>B5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(128-e\)</span>  </td>
+<td><span class="math inline">\(m_1\)</span>  </td>
+<td><span class="math inline">\(m_2\)</span>  </td>
+<td><span class="math inline">\(m_3\)</span>  </td>
+<td><span class="math inline">\(m_4\)</span>  </td>
+</tr>
+</tbody>
+</table>
+<div id="floating-point-example" class="section level3">
+<h3>Floating point example</h3>
+<p>For example, to represent the number one-tenth in five bytes floating point format, we note that</p>
+<p><span class="math inline">\(0.1 = (4/5) \times 2^{-3}\)</span></p>
+<p>with an exponent of -3, and a mantissa of <span class="math inline">\(4/5 = 0.8\)</span>, which in fractional binary is:</p>
+<p><span class="math inline">\((4/5) = (1/2) + (1/4) + (1/32) + (1/64) + (1/512) + (1/1024)...\)</span></p>
+<p>giving a mantissa of</p>
+<p><span class="math inline">\(.11001100\text{_}11001100\text{_}11001100\text{_}11001100\)</span> in binary, and <code>CC_CC_CC_CC</code> in hexadecimal bytes</p>
+<p>Since we want to represent <em>positive</em> one-tenth, the most significant bit of the manitssa (left-most bit of <span class="math inline">\(m_1\)</span>) is set to zero, so we represent +0.1 in five bytes as:</p>
+<p><code>83_4C_CC_CC_CC</code>
+<br></p>
+</div>
+<div id="smallest-and-largest-numbers" class="section level3">
+<h3>Smallest and largest numbers</h3>
+<p>Using this system, the ZX Spectrum can represent positive and negative numbers with these extremes:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Extreme</th>
+<th>  Hex Form  </th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>smallest positive number</td>
+<td><code>FF00000000</code></td>
+<td>2.93873587706e-39</td>
+</tr>
+<tr class="even">
+<td>largest positive number</td>
+<td><code>017FFFFFFF</code></td>
+<td>1.7014118e+38</td>
+</tr>
+<tr class="odd">
+<td>smallest negative number</td>
+<td><code>FF80000000</code></td>
+<td>5.87747175411e-39</td>
+</tr>
+<tr class="even">
+<td>largest negative number</td>
+<td><code>01FFFFFFFF</code></td>
+<td>-1.7014118e+38</td>
+</tr>
+</tbody>
+</table>
+<p>Note that for floating point numbers, the byte B1 representing the exponent cannot take the value <code>00</code>. This is a reserved marker indicating that a 16-bit signed integer is actually embedded within the 5-byte format as:</p>
+<table>
+<thead>
+<tr class="header">
+<th>  B1  </th>
+<th>B2</th>
+<th>B3</th>
+<th>B4</th>
+<th>B5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>00</code>  </td>
+<td><code>FF</code>  </td>
+<td><span class="math inline">\(XX\)</span>  </td>
+<td><span class="math inline">\(YY\)</span>  </td>
+<td><code>00</code>  </td>
+</tr>
+</tbody>
+</table>
+<p>where <span class="math inline">\(XXYY\)</span> is the two’s complement signed 16-bit integer (i.e. in the range -32768 to +32677)</p>
+<p>Note that the exact number zero cannot be represented in this floating point format, since the matissa must <em>always</em> be at least 0.5. Zero is instead represented by an integer padded in the five-byte form as <code>00FF000000</code></p>
+<hr>
+</div>
+</div>
+<div id="supported-functions" class="section level2">
+<h2>Supported Functions</h2>
+<p>So now we know how the ZX stored floating point values using a 5-byte format.</p>
+<p>The ZX Spectrum supports the following ten trigonometric and exponential functions:</p>
+<p><strong>SIN   COS   TAN   ARCSIN   ARCCOS   ARCTAN   LN   EXP   SQRT</strong>   <strong>POW</strong></p>
+<p>The <strong>ARC</strong> commands are simply the inverse trig functions. <strong>POW</strong> is raising one number to the power of another, and is the only binary operator, with the rest unary.</p>
+<p><br></p>
+<div id="mathematical-magic-1" class="section level3">
+<h3>Mathematical Magic #1</h3>
+<p>Four of these are “fundamental” operators:</p>
+<p><strong>EXP   LN   SIN   ARCTAN</strong></p>
+<p>The other six operators are defined in terms of these four fundamental operator. Some of these definitions are simple, but some use quite crafty conversions and mathematical identities!</p>
+<p><strong>COS</strong>   <span class="math inline">\(\pm cos(x) = sin(x \pm \pi/2)\)</span></p>
+<p><strong>TAN</strong>   <span class="math inline">\(\pm tan(x) = \large \frac{sin(x)}{\pm cos(x)} = \large \frac {sin(x)}{sin( x \pm \pi/2)}\)</span></p>
+<p><strong>POW</strong>   <span class="math inline">\(x^y = e^{ln(x^y)} = e^{y \times ln(x)}\)</span></p>
+<p><strong>SQRT</strong>   <span class="math inline">\(\sqrt(x) = x^{0.5} = e^{0.5 \times ln(x)}\)</span></p>
+<p><strong>ARCSIN</strong>   <span class="math inline">\(sin^{-1}(x) =2 \times tan^{-1}(\large \frac{x}{\sqrt(1-x^2)})\)</span></p>
+<p><strong>ARCCOS</strong>   <span class="math inline">\(cos^{-1}(x) = \pi/2 - sin^{-1}(x)\)</span></p>
+<p><br></p>
+<p>Note that the <strong>ARCSIN</strong> calculation uses this form of a half-angle trig identity:</p>
+<p><span class="math inline">\(tan(\large \frac{\theta}{2}) = \large \frac{sin(\theta)}{1+cos(\theta)}\)</span></p>
+<p>and also uses a Pythagorean identity:</p>
+<p><span class="math inline">\(sin^2(\theta) + cos^2(\theta) = 1\)</span></p>
+<p>rearranged to give</p>
+<p><span class="math inline">\(cos(\theta) = \sqrt(1-sin^2(\theta))\)</span></p>
+<p>By using only four operators to derive a total of ten, the ZX Spectrum creators were very cleverly able to keep memory usage down, albeit at the cost of slower speed with multiple conversions using existing routines for the four “base” operators.</p>
+<hr>
+</div>
+</div>
+<div id="where-the-magic-happens-chebyshev-approximations" class="section level2">
+<h2>Where the magic happens: Chebyshev Approximations</h2>
+<p>We have just seen how the ZX Spectrum handles ten functions for the price of only four. The question is, how does it actually implement these four functions using the simple-minded Z80 CPU and a tiny amount of ROM?</p>
+<p>Step forward the Chebyshev Polynomial Series approximation!!</p>
+<p><br></p>
+<div id="chebyshev-the-man." class="section level3">
+<h3>Chebyshev, the man.</h3>
+<p><img src="../../../../images/pafnuty.jfif" /></p>
+<p>Pafnuty Chebyshev was a Russian mathematician and all-round mega-brain that died shortly before the twentieth century. He has over a dozen mathematical and mechanics related equations, relations, functions and mechanisms named after him. Of particular interest in this article are Chebyshev Polynomials, specifically “of the first kind”.</p>
+<p>The mathematics get’s a bit heavy, so I’ll leave it as a study exercise for the interested reader. There are some well-written resources in the references at the end of this article. Here, we’ll just stick to how a truncated series of these polynomials can be used to finely approximate functions like <strong>EXP</strong>, <strong>LN</strong>, <strong>SIN</strong> and <strong>ARCTAN</strong>, allowing the little Speccy to crunch the numbers and allow young programmers like I was to write BASIC programs that drew fractals, circles, ellipses and solve maths homework.</p>
+<p><br></p>
+</div>
+<div id="chebyshev-the-polynomials." class="section level3">
+<h3>Chebyshev, the polynomials.</h3>
+<p>In a nut-shell, Chebyshev polynomials are those that fulfill the relation:</p>
+<p><span class="math inline">\(T_n(x)=cos(ncos^{-1}(x))\)</span></p>
+<p>where <span class="math inline">\(n=0,1,2,3,...\)</span> and <span class="math inline">\(T_n(x)\)</span> is the nth “Chebyshev polynomial of the first kind”</p>
+<p>The first couple of polynomials are dead easy!</p>
+<p><span class="math inline">\(T_0(x)=cos(0 \times cos^{-1}(x)) = cos(0) = 1\)</span></p>
+<p><span class="math inline">\(T_1(x)=cos(1 \times cos^{-1}(x)) = cos(cos^{-1}(x)) = x\)</span></p>
+<p>From the third polnomial onwards, it gets tricky:</p>
+<p><span class="math inline">\(T_2(x)=cos(2 \times cos^{-1}(x)) = ?\)</span></p>
+<p><span class="math inline">\(T_2(x)=cos(3 \times cos^{-1}(x)) = ?!?\)</span></p>
+<p>But it turns out that there is a recurrence relation that allows you to compute the (n+1)th polynomial, when you already know the nth and (n-1)th, avoiding all the hard work!</p>
+<p><span class="math inline">\(T_{n+1}(x) = 2\cdot x \cdot T_n(X) - T_{n-1}(x)\)</span></p>
+<p>Since we know <span class="math inline">\(T_0(x)\)</span> and <span class="math inline">\(T_1(x)\)</span> already, then:</p>
+<p><span class="math inline">\(T_2(x)= 2 \times x \times T_1(x) -T_0(x) = 2 \times x \times x - 1 = 2x^2-1\)</span></p>
+<p>and by the same token, we can find <span class="math inline">\(T_3(x)\)</span> and so on. The first twelve Chebyshev polynomials of the first kind are shown below:</p>
+<p><span class="math inline">\(T_0(x) = 1 \\ T_1(x) = x \\ T_2(x) = 2x^2 − 1 \\ T_3(x) = 4x^3 − 3x \\ T_4(x) = 8x^4 − 8x^2 + 1 \\ T_5(x) = 16x^5 − 20x^3 + 5x \\ T_6(x) = 32x^6 − 48x^4 + 18x^2 − 1 \\ T_7(x) = 64x^7 − 112x^5 + 56x^3 − 7x \\ T_8(x) = 128x^8 − 256x^6 + 160x^4 − 32x^12 + 1 \\ T_9(x) = 256x^9 − 576x^7 + 432x^5 − 120x^3 + 9x \\ T_{10}(x) = 512x^{10} − 1280x^8 + 1120x^6 − 400x^4 + 50x^2 − 1 \\ T_{11}(x) = 1024x^{11} − 2816x^9 + 2816x^7 − 1232x^5 + 220x^3 − 11x\)</span></p>
+<p>The first five polynomials look like this:
+<br>
+<img src="../../../../images/chebyshev_polynomials_graph.png" /></p>
+<p>These polynomials have many interesting properties, but what we care about is that over the range <span class="math inline">\(-1 \leq x \leq +1\)</span>, we can very closely approximate <em>some other</em> function as a linear combination of the first few Chebyshev polynomials.</p>
+<p>To put this another way, by adding together certain scaled “amounts” of the first few polynomials, we get an overall function that looks a lot like, say, the <strong>SIN</strong> function for example. To express this mathematically:</p>
+<p><span class="math inline">\(f(x) \approx \sum_{n=0}^{n=k}A_nT_n(x)\)</span></p>
+<p>where <span class="math inline">\(A_n\)</span> is a simple scalar coefficient that “scales” how much of each <span class="math inline">\(T_n(x)\)</span> to add together.</p>
+<p>This is very much like Fourier synthesis, in which any repetitive waveform can be “built up” from various differing amounts of harmonically related single frequencies.</p>
+<p>In our case, we want <span class="math inline">\(f(x)=sin(x)\)</span>, and since we know what each <span class="math inline">\(T_n(x)\)</span>, up to <span class="math inline">\(n=11\)</span> in the above list, then if only we could find out what each number <span class="math inline">\(A_n\)</span> is, then we could approximate <strong>SIN</strong> as some simple sum of say the first <span class="math inline">\(k+1\)</span> polynomials, i.e.:</p>
+<p><span class="math inline">\(sin(x) \approx A_0T_0(x) + ... + A_kT_k(x)\)</span></p>
+<p>Since each <span class="math inline">\(T_n(x)\)</span> is just some polynomial in powers of x, we can add up all the “amounts” of each power of x, and end up with coefficients, say <span class="math inline">\(a\)</span>:</p>
+<p><span class="math inline">\(sin(x) \approx a_0 \cdot x^0 + a_1 \cdot x^1 + a_2 \cdot x^2 + .... + a_k \cdot x^k = a_0 + a_1x + a_2x^2 + .... + a_kx^k\)</span></p>
+<p>Going back a step, again, skipping the derivations which you can find else where, the coefficients <span class="math inline">\(A_n\)</span> can be found using:</p>
+<p><span class="math inline">\(A_0 = \large \frac{1}{\pi} \int_{-1}^{+1} \large \frac{f(x)dx}{\sqrt(1-x^2)}\)</span></p>
+<p>and for <span class="math inline">\(n=1,2,3...k\)</span> as</p>
+<p><span class="math inline">\(A_n = \large \frac{2}{\pi}\int_{-1}^{1} \large \frac{f(x)T_n(x)dx}{\sqrt(1-x^2)}\)</span></p>
+</div>
+<div id="scaling-in-x" class="section level3">
+<h3>Scaling in <span class="math inline">\(x\)</span></h3>
+<p>Before we get carried away and launch in to some number crunching, we have to bear in mind that the approximations above work only over the range <span class="math inline">\(-1 \leq x \leq +1\)</span>. Outside this, the approximation fall apart, and the sum of polynomials will not “follow” or mimic our chosen funtion <span class="math inline">\(f(x)\)</span> anymore.</p>
+<p>Scaling to the rescue! For our chosen <strong>SIN</strong> function, we can compress the full range of <strong>SIN</strong> from say <span class="math inline">\(-\pi/2 \leq x \leq \pi/2\)</span> to our desired <span class="math inline">\(-1 \leq x&#39; \leq +1\)</span> if we let <span class="math inline">\(x \rightarrow x&#39;\)</span> where <span class="math inline">\(x&#39;=(\pi /2) \cdot x\)</span>.</p>
+<p><img src="/post/how-the-humble-spectrum-handled-trig_files/figure-html/unnamed-chunk-1-1.png" width="768" /></p>
+</div>
+<div id="approximating-sin" class="section level3">
+<h3>Approximating <strong>SIN</strong></h3>
+<p>Now we’ll use the above two equations for the coefficients <span class="math inline">\(A_n\)</span> to put R to wor, doing a numerical integration for us to find these coefficients to approximate the <strong>SIN</strong> function, i.e. <span class="math inline">\(f(x)=sin(x)\)</span>. We’ll do this for <span class="math inline">\(n\)</span> up to 5 to start with.</p>
+<p>Remembering that <span class="math inline">\(T_0(x) = 1\)</span>, then <span class="math inline">\(A_0\)</span> says how much “offset” or for the electrical/electronics engineers out there, how much “DC” we want in our composite of polynomials. <strong>SIN</strong> over full cycles has an average of zero, or no offset or “DC” component, so we may expect <span class="math inline">\(A_0\)</span> to be zero. Let’s find out…</p>
+<pre class="r"><code>n = 0
+f = sin
+A = rep(0,6)
+
+# define the polynomials
+T0 = 1
+T1 &lt;- function(x) x
+T2 &lt;- function(x) 2*x^2-1
+T3 &lt;- function(x) 4*x^3-3*x
+T4 &lt;- function(x) 8*x^4-8*x^2+1
+T5 &lt;- function(x) 16*x^5 -20*x^3 + 5*x
+
+Tn=list(T0,T1,T2,T3,T4,T5)
+
+# find A_0 first
+integrand &lt;- function(x) {sin(pi*x/2)/sqrt(1-x^2)}
+A[1] = (1/pi)*integrate(integrand, lower=-1, upper=1)$value
+
+# loop to compute rest of A_n
+for (i in 1:5) {
+  integrand &lt;- function(x) {sin(pi*x)*Tn[[i+1]](x)/sqrt(1-x^2)}
+  A[i+1] = (2/pi)*integrate(integrand, lower=-1, upper=1)$value
+}
+
+# show coefficients
+A</code></pre>
+<pre><code>## [1]  0.0000000  0.5692307  0.0000000 -0.6669167  0.0000000  0.1042824</code></pre>
+</div>
+<div id="precomputed-computations-in-the-rom" class="section level3">
+<h3>Precomputed computations in the ROM</h3>
+<p>TBD
+how the speccy uses the precomputed coeffiecients (12,8,6,12) for EXP,LN,SIN,ARCTAN
+how the speccy handles the range of the function to keep the approximation valid? -1 to +1???</p>
+<p>Here’s a simple function to the hex format as stored in memory to the floating point number it represents:</p>
+<pre class="r"><code>#float_to_hex(pi)
+#float_to_hex(-1.7014118e+38)
+#float_to_hex(1.7014118e+38)</code></pre>
+<p>The spectrum ROM uses these coefficients for the Chebyshev polynomial approximation, stored in ROM at 0x37BE to 0x37D6:</p>
+</div>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li><p>The disassembled ZX Spectrum ROM can be found <a href="https://skoolkid.github.io/rom/">here</a></p></li>
+<li><p>A Z80 CPU datasheet can be found <a href="http://www.zilog.com/docs/z80/um0080.pdf">here</a></p></li>
+<li><p>Chapter 24 of the ZX Spectrum <a href="https://worldofspectrum.org/ZXBasicManual/zxmanchap24.html">manual</a> which covers the floating point and integer number format representation in memory, near the page bottom.</p></li>
+<li><p>An <a href="https://aip.scitation.org/doi/pdf/10.1063/1.4823278">article</a> from “Computers in Physics” 1994 that includes an approximation exmaple for <span class="math inline">\(e^x\)</span></p></li>
+<li><p>The <a href="https://en.wikipedia.org/wiki/Chebyshev_polynomials">Wikipedia</a> page on Chebyshev Polynomials is a good starting point</p></li>
+<li><p>A very interesting <a href="https://www.embeddedrelated.com/showarticle/152.php">article</a> about using the Chebyshev approximation in CPU-power constrained embedded systems</p></li>
+</ul>
+</div>
+</div>
+
+    </div>
+  </article>
+
+  
+
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="/images/hugo-logo.png" alt="Img link to Hugo website" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+    
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/r.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/yaml.min.js"></script>
+<script>hljs.configure({languages: []}); hljs.initHighlightingOnLoad();</script>
+
+
+
+    
+<script src="/js/math-code.js"></script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+    
+  </body>
+</html>
+
