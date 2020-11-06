@@ -119,7 +119,7 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 <p><span class="math inline">\(\pm mantissa \times 2^{e}\)</span></p>
 <p>In the ZX Spectrum, <span class="math inline">\(mantissa\)</span> is made up of the four bytes <span class="math inline">\(m_1\)</span> to <span class="math inline">\(m_4\)</span>, expressed as a fractional integer, as illustrated here using only four bits after the decimal point The ZX Spectrum uses 32 bits.</p>
 <div class="figure">
-<img src="../../../../images/fractional_binary.gif" alt="" />
+<img src="../../../../images/fractional_binary.gif" alt="image_medium" />
 <p class="caption">image_medium</p>
 </div>
 <p>The Spectrum ROM code assumes that the left-most (most-significant) bit of the mantissa would be a one, with a value of 0.5. This allows this bit to be re-purposed to indicate the sign of the number being encoded, with 0 meaning positive, and 1 meaning negative.</p>
@@ -254,7 +254,7 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 <p><br></p>
 <div id="chebyshev-the-man." class="section level3">
 <h3>Chebyshev, the man.</h3>
-<p><img src="../../../../images/pafnuty.jfif" /></p>
+<p><embed src="../../../../images/pafnuty.jfif" /></p>
 <p>Pafnuty Chebyshev was a Russian mathematician and all-round mega-brain that died shortly before the twentieth century. He has over a dozen mathematical and mechanics related equations, relations, functions and mechanisms named after him. Of particular interest in this article are Chebyshev Polynomials, specifically “of the first kind”.</p>
 <p>The mathematics get’s a bit heavy, so I’ll leave it as a study exercise for the interested reader. There are some well-written resources in the references at the end of this article. Here, we’ll just stick to how a truncated series of these polynomials can be used to finely approximate functions like <strong>EXP</strong>, <strong>LN</strong>, <strong>SIN</strong> and <strong>ARCTAN</strong>, allowing the little Speccy to crunch the numbers and allow young programmers like I was to write BASIC programs that drew fractals, circles, ellipses and solve maths homework.</p>
 <p><br></p>
