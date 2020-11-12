@@ -62,7 +62,7 @@
 
   <article class="article">
     
-    <span class="article-duration">11 min read</span>
+    <span class="article-duration">14 min read</span>
     
 
     <h1 class="article-title">the zx spectrum and the chebyshev series generator</h1>
@@ -214,7 +214,7 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 </tbody>
 </table>
 <p>where <span class="math inline">\(XXYY\)</span> is the two’s complement signed 16-bit integer (i.e. in the range -32768 to +32677)</p>
-<p>Note that the exact number zero cannot be represented in this floating point format, since the matissa must <em>always</em> be at least 0.5. Zero is instead represented by an integer padded in the five-byte form as <code>00FF000000</code></p>
+<p>Note that the exact number zero cannot be represented in this floating point format, since there is no way that <span class="math inline">\(2^e=0\)</span> unless <span class="math inline">\(e \rightarrow -\infty\)</span>. Zero is instead represented by an integer padded in the five-byte form as <code>00FF000000</code></p>
 <hr>
 </div>
 </div>
@@ -261,86 +261,160 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 </div>
 <div id="chebyshev-the-polynomials." class="section level3">
 <h3>Chebyshev, the polynomials.</h3>
-<p>In a nut-shell, Chebyshev polynomials are those that fulfill the relation:</p>
+<p>In a nut-shell, Chebyshev polynomials (<span class="math inline">\(T_n(x)\)</span>) are those that fulfill the relation:</p>
 <p><span class="math inline">\(T_n(x)=cos(ncos^{-1}(x))\)</span></p>
 <p>where <span class="math inline">\(n=0,1,2,3,...\)</span> and <span class="math inline">\(T_n(x)\)</span> is the nth “Chebyshev polynomial of the first kind”</p>
 <p>The first couple of polynomials are dead easy!</p>
 <p><span class="math inline">\(T_0(x)=cos(0 \times cos^{-1}(x)) = cos(0) = 1\)</span></p>
 <p><span class="math inline">\(T_1(x)=cos(1 \times cos^{-1}(x)) = cos(cos^{-1}(x)) = x\)</span></p>
 <p>From the third polnomial onwards, it gets tricky:</p>
-<p><span class="math inline">\(T_2(x)=cos(2 \times cos^{-1}(x)) = ?\)</span></p>
-<p><span class="math inline">\(T_2(x)=cos(3 \times cos^{-1}(x)) = ?!?\)</span></p>
+<p><span class="math inline">\(T_2(x)=cos(2 \times cos^{-1}(x)) = \: ?\)</span></p>
+<p><span class="math inline">\(T_2(x)=cos(3 \times cos^{-1}(x)) = \: ?!?\)</span></p>
 <p>But it turns out that there is a recurrence relation that allows you to compute the (n+1)th polynomial, when you already know the nth and (n-1)th, avoiding all the hard work!</p>
-<p><span class="math inline">\(T_{n+1}(x) = 2\cdot x \cdot T_n(X) - T_{n-1}(x)\)</span></p>
+<p><span class="math inline">\(T_{n+1}(x) = 2 x T_n(X) - T_{n-1}(x)\)</span></p>
 <p>Since we know <span class="math inline">\(T_0(x)\)</span> and <span class="math inline">\(T_1(x)\)</span> already, then:</p>
 <p><span class="math inline">\(T_2(x)= 2 \times x \times T_1(x) -T_0(x) = 2 \times x \times x - 1 = 2x^2-1\)</span></p>
 <p>and by the same token, we can find <span class="math inline">\(T_3(x)\)</span> and so on. The first twelve Chebyshev polynomials of the first kind are shown below:</p>
-<p><span class="math inline">\(T_0(x) = 1 \\ T_1(x) = x \\ T_2(x) = 2x^2 − 1 \\ T_3(x) = 4x^3 − 3x \\ T_4(x) = 8x^4 − 8x^2 + 1 \\ T_5(x) = 16x^5 − 20x^3 + 5x \\ T_6(x) = 32x^6 − 48x^4 + 18x^2 − 1 \\ T_7(x) = 64x^7 − 112x^5 + 56x^3 − 7x \\ T_8(x) = 128x^8 − 256x^6 + 160x^4 − 32x^12 + 1 \\ T_9(x) = 256x^9 − 576x^7 + 432x^5 − 120x^3 + 9x \\ T_{10}(x) = 512x^{10} − 1280x^8 + 1120x^6 − 400x^4 + 50x^2 − 1 \\ T_{11}(x) = 1024x^{11} − 2816x^9 + 2816x^7 − 1232x^5 + 220x^3 − 11x\)</span></p>
-<p>The first five polynomials look like this:
+<p><span class="math inline">\(T_0(x) = 1 \\ T_1(x) = x \\ T_2(x) = 2x^2 − 1 \\ T_3(x) = 4x^3 − 3x \\ T_4(x) = 8x^4 − 8x^2 + 1 \\ T_5(x) = 16x^5 − 20x^3 + 5x \\ T_6(x) = 32x^6 − 48x^4 + 18x^2 − 1 \\ T_7(x) = 64x^7 − 112x^5 + 56x^3 − 7x \\ T_8(x) = 128x^8 − 256x^6 + 160x^4 − 32x^2 + 1 \\ T_9(x) = 256x^9 − 576x^7 + 432x^5 − 120x^3 + 9x \\ T_{10}(x) = 512x^{10} − 1280x^8 + 1120x^6 − 400x^4 + 50x^2 − 1 \\ T_{11}(x) = 1024x^{11} − 2816x^9 + 2816x^7 − 1232x^5 + 220x^3 − 11x\)</span></p>
+<p>The first five polynomials look like this over the range <span class="math inline">\(-1 \leq x \leq +1\)</span>:
 <br>
 <img src="../../../../images/chebyshev_polynomials_graph.png" /></p>
+<p>Note that outside this limited range for <span class="math inline">\(x\)</span>, these polynomials generally go crazy dissapearing off to extreme values, so we really must stick with them only within our limited range.</p>
 <p>These polynomials have many interesting properties, but what we care about is that over the range <span class="math inline">\(-1 \leq x \leq +1\)</span>, we can very closely approximate <em>some other</em> function as a linear combination of the first few Chebyshev polynomials.</p>
 <p>To put this another way, by adding together certain scaled “amounts” of the first few polynomials, we get an overall function that looks a lot like, say, the <strong>SIN</strong> function for example. To express this mathematically:</p>
-<p><span class="math inline">\(f(x) \approx \sum_{n=0}^{n=k}A_nT_n(x)\)</span></p>
-<p>where <span class="math inline">\(A_n\)</span> is a simple scalar coefficient that “scales” how much of each <span class="math inline">\(T_n(x)\)</span> to add together.</p>
+<p><span class="math inline">\(f(x) \approx \sum_{n=0}^{n=k-1}A_nT_n(x)\)</span></p>
+<p>where <span class="math inline">\(A_n\)</span> is a simple scalar coefficient that “scales” how much of each of the first <span class="math inline">\(k\)</span> polynomials <span class="math inline">\(T_n(x)\)</span> to add together.</p>
 <p>This is very much like Fourier synthesis, in which any repetitive waveform can be “built up” from various differing amounts of harmonically related single frequencies.</p>
-<p>In our case, we want <span class="math inline">\(f(x)=sin(x)\)</span>, and since we know what each <span class="math inline">\(T_n(x)\)</span>, up to <span class="math inline">\(n=11\)</span> in the above list, then if only we could find out what each number <span class="math inline">\(A_n\)</span> is, then we could approximate <strong>SIN</strong> as some simple sum of say the first <span class="math inline">\(k+1\)</span> polynomials, i.e.:</p>
+<p>In our case, we have <span class="math inline">\(f(x)=sin(x)\)</span>, and since we know what each <span class="math inline">\(T_n(x)\)</span>, up to <span class="math inline">\(n=11\)</span> in the above list, then if only we could find out what each number <span class="math inline">\(A_n\)</span> is, we could approximate <strong>SIN</strong> as some simple sum of say the first <span class="math inline">\(k\)</span> polynomials, i.e.:</p>
 <p><span class="math inline">\(sin(x) \approx A_0T_0(x) + ... + A_kT_k(x)\)</span></p>
-<p>Since each <span class="math inline">\(T_n(x)\)</span> is just some polynomial in powers of x, we can add up all the “amounts” of each power of x, and end up with coefficients, say <span class="math inline">\(a\)</span>:</p>
-<p><span class="math inline">\(sin(x) \approx a_0 \cdot x^0 + a_1 \cdot x^1 + a_2 \cdot x^2 + .... + a_k \cdot x^k = a_0 + a_1x + a_2x^2 + .... + a_kx^k\)</span></p>
-<p>Going back a step, again, skipping the derivations which you can find else where, the coefficients <span class="math inline">\(A_n\)</span> can be found using:</p>
-<p><span class="math inline">\(A_0 = \large \frac{1}{\pi} \int_{-1}^{+1} \large \frac{f(x)dx}{\sqrt(1-x^2)}\)</span></p>
+<p>Since each <span class="math inline">\(T_n(x)\)</span> is just some polynomial in powers of x, we <em>could</em> add up all the “amounts” of each power of x, and end up with coefficients, say <span class="math inline">\(a\)</span>:</p>
+<p><span class="math inline">\(sin(x) \approx a_0x^0 + a_1x^1 + a_2x^2 + ... + a_kx^k = a_0 + a_1x + a_2x^2 + .... + a_kx^k\)</span></p>
+<p>However, it is easier just to add upp the Chebyshev polynomials directly, and this is how the ZX Spectrum does it.</p>
+<p>Going back a step, and skipping the derivations which you can find else where, the coefficients <span class="math inline">\(A_n\)</span> can be found using:</p>
+<p><span class="math inline">\(A_0 = \large \frac{1}{\pi} \large \int_{-1}^{+1} \large \frac{f(x)dx}{\sqrt(1-x^2)}\)</span></p>
 <p>and for <span class="math inline">\(n=1,2,3...k\)</span> as</p>
-<p><span class="math inline">\(A_n = \large \frac{2}{\pi}\int_{-1}^{1} \large \frac{f(x)T_n(x)dx}{\sqrt(1-x^2)}\)</span></p>
+<p><span class="math inline">\(A_n = \large \frac{2}{\pi}\large \int_{-1}^{1} \large \frac{f(x)T_n(x)dx}{\sqrt(1-x^2)}\)</span></p>
 </div>
 <div id="scaling-in-x" class="section level3">
 <h3>Scaling in <span class="math inline">\(x\)</span></h3>
-<p>Before we get carried away and launch in to some number crunching, we have to bear in mind that the approximations above work only over the range <span class="math inline">\(-1 \leq x \leq +1\)</span>. Outside this, the approximation fall apart, and the sum of polynomials will not “follow” or mimic our chosen funtion <span class="math inline">\(f(x)\)</span> anymore.</p>
-<p>Scaling to the rescue! For our chosen <strong>SIN</strong> function, we can compress the full range of <strong>SIN</strong> from say <span class="math inline">\(-\pi/2 \leq x \leq \pi/2\)</span> to our desired <span class="math inline">\(-1 \leq x&#39; \leq +1\)</span> if we let <span class="math inline">\(x \rightarrow x&#39;\)</span> where <span class="math inline">\(x&#39;=(\pi /2) \cdot x\)</span>.</p>
+<p>Before we get carried away and launch in to some number crunching, we have to bear in mind that the approximations above work only over the range <span class="math inline">\(-1 \leq x \leq +1\)</span> as stressed already. Outside this, the approximation fall apart, and the sum of polynomials will not “follow” or mimic our chosen funtion <span class="math inline">\(f(x)\)</span> anymore.</p>
+<p>Scaling to the rescue! For our chosen <strong>SIN</strong> function, we can compress a full cycle of <strong>SIN</strong> from say <span class="math inline">\(-\pi/2 \leq x \leq \pi/2\)</span> to our desired <span class="math inline">\(-1 \leq x&#39; \leq +1\)</span> if we let <span class="math inline">\(x \rightarrow x&#39;\)</span> where <span class="math inline">\(x&#39;= x / (\pi)\)</span>.</p>
 <p><img src="/post/how-the-humble-spectrum-handled-trig_files/figure-html/unnamed-chunk-1-1.png" width="768" /></p>
 </div>
 <div id="approximating-sin" class="section level3">
 <h3>Approximating <strong>SIN</strong></h3>
-<p>Now we’ll use the above two equations for the coefficients <span class="math inline">\(A_n\)</span> to put R to wor, doing a numerical integration for us to find these coefficients to approximate the <strong>SIN</strong> function, i.e. <span class="math inline">\(f(x)=sin(x)\)</span>. We’ll do this for <span class="math inline">\(n\)</span> up to 5 to start with.</p>
-<p>Remembering that <span class="math inline">\(T_0(x) = 1\)</span>, then <span class="math inline">\(A_0\)</span> says how much “offset” or for the electrical/electronics engineers out there, how much “DC” we want in our composite of polynomials. <strong>SIN</strong> over full cycles has an average of zero, or no offset or “DC” component, so we may expect <span class="math inline">\(A_0\)</span> to be zero. Let’s find out…</p>
-<pre class="r"><code>n = 0
-f = sin
-A = rep(0,6)
-
-# define the polynomials
-T0 = 1
+<p>Now we’ll use the above two equations for the coefficients <span class="math inline">\(A_n\)</span> to put R to work, doing a numerical integration for us to find these coefficients to approximate the <strong>SIN</strong> function, i.e. <span class="math inline">\(f(x)=sin(x&#39;)\)</span>. We’ll do this for <span class="math inline">\(n\)</span> up to 5 to start with.</p>
+<p>Remembering that <span class="math inline">\(T_0(x) = 1\)</span>, then <span class="math inline">\(A_0\)</span> says how much “offset” - or for the electrical/electronics engineers out there, how much “DC” - we want in our composite of polynomials. <strong>SIN</strong> over full cycles has an average of zero, or no offset or “DC” component, so we may expect <span class="math inline">\(A_0\)</span> to be zero. Let’s find out…</p>
+<pre class="r"><code># define the polynomials
+T0 &lt;- function(x) 1
 T1 &lt;- function(x) x
 T2 &lt;- function(x) 2*x^2-1
 T3 &lt;- function(x) 4*x^3-3*x
 T4 &lt;- function(x) 8*x^4-8*x^2+1
-T5 &lt;- function(x) 16*x^5 -20*x^3 + 5*x
+T5 &lt;- function(x) 16*x^5-20*x^3+5*x
+T6 &lt;- function(x) 32*x^6-48*x^4+18*x^2-1
+T7 &lt;- function(x) 64*x^7-112*x^5+56*x^3-7*x
+T8 &lt;- function(x) 128* x^8-256 *x^6+160*x^4-32*x^2+1
+T9 &lt;- function(x) 256*x^9-576*x^7+432*x^5-120*x^3+9*x
 
-Tn=list(T0,T1,T2,T3,T4,T5)
+Tn = list(T0,T1,T2,T3,T4,T5,T6,T7,T8,T9)
+
+A = numeric()
 
 # find A_0 first
-integrand &lt;- function(x) {sin(pi*x/2)/sqrt(1-x^2)}
-A[1] = (1/pi)*integrate(integrand, lower=-1, upper=1)$value
+integrand &lt;- function(x) {sin(x*pi) / sqrt(1-x^2)}
+A[1] = (1/pi) * integrate(integrand, lower=-1, upper=1)$value
 
 # loop to compute rest of A_n
-for (i in 1:5) {
-  integrand &lt;- function(x) {sin(pi*x)*Tn[[i+1]](x)/sqrt(1-x^2)}
-  A[i+1] = (2/pi)*integrate(integrand, lower=-1, upper=1)$value
+
+for (i in 1:9) {
+  integrand &lt;- function(x) {sin(x*pi) * Tn[[i+1]](x) / sqrt(1-x^2)}
+  A[i+1] = (2/pi) * integrate(integrand, lower=-1, upper=1)$value
 }
 
 # show coefficients
 A</code></pre>
-<pre><code>## [1]  0.0000000  0.5692307  0.0000000 -0.6669167  0.0000000  0.1042824</code></pre>
+<pre><code>##  [1]  0.0000000000  0.5692306864  0.0000000000 -0.6669166724  0.0000000000
+##  [6]  0.1042823687  0.0000000000 -0.0068406336  0.0000000000  0.0002500068</code></pre>
+<p>Only odd coefficients are required (i.e. <span class="math inline">\(n=1,3,5...\)</span>), so let’s see how accurate the approximation is using the first five non-zero, odd coefficients, up to <span class="math inline">\(n=9\)</span></p>
+<pre class="r"><code>runsum  &lt;- rep(0,40)
+x &lt;- seq(-1, 1, length.out = 40)
+for (i in seq(2,10,by=2)) {
+  runsum &lt;- runsum + A[i]*Tn[[i]](x)
+}
+plot(runsum, ylim=c(-1,1), col=&quot;blue&quot;, pch=1, type=&quot;p&quot;)
+lines(sin(x*pi), col=&quot;red&quot;)
+legend(x=0,y=0.75,legend=c(&quot;cheby_series&quot;,&quot;true sin()&quot;), col=c(&quot;blue&quot;, &quot;red&quot;), pch=c(1,19))</code></pre>
+<p><img src="/post/how-the-humble-spectrum-handled-trig_files/figure-html/test_sin_approximation-1.png" width="672" /></p>
+<p>We can now measure the maximum error between true <span class="math inline">\(f(x)=sin(x)\)</span> and our approximation using the Chebyshev polynomial series, using three, four and five of the first odd-numbered coefficients:</p>
+<pre class="r"><code># what is error with 3,4 and 5 coefficients?
+x &lt;- seq(-1,1,length.out = 100)
+max_error &lt;- numeric()
+for (i in 1:3) {
+  sin_approx &lt;- rep(0,100)
+  for (i in seq(2,(2*i+4),by=2)) {
+    sin_approx &lt;- sin_approx + A[i]*Tn[[i]](x)
+  }
+  max_error &lt;- c(max_error, max(sin(x*pi) - sin_approx))
+}
+max_error</code></pre>
+<pre><code>## [1] 7.060408e-03 2.555824e-04 5.913220e-06</code></pre>
+<p>We see the error rapidly reduce, from about 7000ppm (or 0.7%) with three odd numbered coefficients (<span class="math inline">\(T_1(x), T_3(x), T_5(x)\)</span>) down to about 6ppm (0.0006%) with five!</p>
+<p>Can we do better though? One issue with the approximation derived above is that it needs polynommials <span class="math inline">\(T_1(x), T_3(x), T_5(x), T_7(x)\)</span> and <span class="math inline">\(T_9(x)\)</span>. i.e. powers of <span class="math inline">\(x\)</span> up to 9. This is pretty high, and may introduce significant floating point rounding errors. We would prefer to keep the power of <span class="math inline">\(x\)</span> lower!</p>
+<p>In the ZX Spectrum, a slightly different formulation of the Chebyshev polynomials is used, called the Shifted Chebyshev Polynomial.</p>
 </div>
-<div id="precomputed-computations-in-the-rom" class="section level3">
-<h3>Precomputed computations in the ROM</h3>
-<p>TBD
-how the speccy uses the precomputed coeffiecients (12,8,6,12) for EXP,LN,SIN,ARCTAN
-how the speccy handles the range of the function to keep the approximation valid? -1 to +1???</p>
-<p>Here’s a simple function to the hex format as stored in memory to the floating point number it represents:</p>
-<pre class="r"><code>#float_to_hex(pi)
-#float_to_hex(-1.7014118e+38)
-#float_to_hex(1.7014118e+38)</code></pre>
-<p>The spectrum ROM uses these coefficients for the Chebyshev polynomial approximation, stored in ROM at 0x37BE to 0x37D6:</p>
+<div id="the-shifted-form" class="section level3">
+<h3>The Shifted Form</h3>
+<p>The Shifted Chebyshev polynomial is denoted as <span class="math inline">\(T^*_n(x)\)</span>, and is defined:</p>
+<p><span class="math inline">\(T^*_n(x) = T_n(2x-1)\)</span></p>
+<p>So that the first few shifted polynomials are:</p>
+<p><span class="math inline">\(T_0(x) = 1 \\ T_1(x) = 2x-1 \\ T_2(x) = 8x^2 − 8x + 1 \\ T_3(x) = 32x^3 −48x^2 + 18x - 1 \\ T_4(x) = 128x^4 -256x^3 + 160x^2 -32x + 1\)</span></p>
+<p>and so on.</p>
+<p>The ZX Spectrum creators likely had a copy of Abramowitz and Stegun’s massively chunky reference tome, a <em>“Handbook of Mathematical Functions”</em> published by Dover in 1965. Page 76 is possibly where the ZX Spectrum gets its implementation from, and an excerpt is shown below. This method only requires up to T_5(x), i.e. only the fifth power of <span class="math inline">\(x\)</span> is used, decreasing floating point rounding errors.</p>
+<p><br>
+<img src="../../../../images/dover1965.jpg" alt="image_medium" /></p>
+<p>Code that implements this method is given here:</p>
+<pre class="r"><code>As=c(1.276278962,-0.285261569,0.009118016,-0.000136587,0.000001185,-0.000000007)
+
+Ts0 &lt;- function(x) 1
+Ts1 &lt;- function(x) 2*x-1
+Ts2 &lt;- function(x) 8*x^2-8*x+1
+Ts3 &lt;- function(x) 32*x^3-48*x^2+18*x-1
+Ts4 &lt;- function(x) 128*x^4-256*x^3+16*x^2-32*x+1
+Ts5 &lt;- function(x) 512*x^5-1280*x^4+1120*x^3-400*x^2+50*x-1
+
+Tsn = list(Ts0,Ts1,Ts2,Ts3,Ts4,Ts5)
+
+
+x &lt;- seq(-1,1,length.out = 40)
+sin_approx &lt;- rep(0,length(x))
+for (i in 1:6) {
+  sin_approx &lt;- sin_approx + As[i]*Tsn[[i]](x^2)
+}
+plot(x, x*sin_approx, col=&quot;blue&quot;, pch=1)
+lines(x,sin(pi*x/2), col=&quot;red&quot;, type=&quot;l&quot;)</code></pre>
+<p><img src="/post/how-the-humble-spectrum-handled-trig_files/figure-html/from_handbook-1.png" width="672" /></p>
+<p>Again, let’s take a look at the maximum error between this truncated shifted polynomial series approximation, and a true sin() function - assuming R on a modern 64bit PC is <strong>much</strong> more accurate than a ZX Spectrum!</p>
+<pre class="r"><code># what is error with 6 coefficients using the shifted form?
+x &lt;- seq(-1,1,length.out = 100)
+max_error &lt;- numeric()
+sin_approx &lt;- rep(0,100)
+for (i in 1:6) {
+  sin_approx &lt;- sin_approx + As[i]*Tsn[[i]](x^2)
+}
+sin_approx &lt;- x* sin_approx
+max_error &lt;- c(max_error, max(sin(pi*x/2) - sin_approx))
+
+# show maximum error
+max_error</code></pre>
+<pre><code>## [1] 0.00017064</code></pre>
+<p>The maximum error is about 170ppm (or 0.017%). This is a lot higher than our approximation using the unshifted polynomials <span class="math inline">\(T_n(x)\)</span> up to the ninth power of <span class="math inline">\(x\)</span>, however, it would be quicker for the Spectrum to compute, with less worry about rounding errors from so many repeated multiplications for these high powers.</p>
+</div>
+<div id="end-notes" class="section level3">
+<h3>End Notes</h3>
+<p>There is more information about the exact method used by teh ZX Spectrum in the fantastic (but totally out of print) book by Logan and O’Hara. You can get a copy for peanuts on Ebay!</p>
+<p><br>
+<img src="../../../../images/rom_book.png" alt="image_medium" /></p>
 </div>
 <div id="references" class="section level3">
 <h3>References</h3>
