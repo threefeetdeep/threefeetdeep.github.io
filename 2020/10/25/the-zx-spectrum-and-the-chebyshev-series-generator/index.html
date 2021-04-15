@@ -10,7 +10,7 @@
 <meta property="og:title" content="the zx spectrum and the chebyshev series generator - ThreeFeetDeep">
 
 
-  <link href='/favicon.ico' rel='icon' type='image/x-icon'/>
+  <link href='favicon.ico' rel='icon' type='image/x-icon'/>
 
 
 
@@ -359,7 +359,7 @@ for (i in 1:3) {
 }
 max_error</code></pre>
 <pre><code>## [1] 7.060408e-03 2.555824e-04 5.913220e-06</code></pre>
-<p>We see the error rapidly reduce, from about 7000ppm (or 0.7%) with three odd numbered coefficients (<span class="math inline">\(T_1(x), T_3(x), T_5(x)\)</span>) down to about 6ppm (0.0006%) with five!</p>
+<p>We see the error rapidly reduce, from about 7000ppm (or 0.7%) with three odd numbered coefficients (<span class="math inline">\(T_1(x), T_3(x), T_5(x)\)</span>) down to about 6ppm (0.0006%) with five.</p>
 <p>Can we do better though? One issue with the approximation derived above is that it needs polynommials <span class="math inline">\(T_1(x), T_3(x), T_5(x), T_7(x)\)</span> and <span class="math inline">\(T_9(x)\)</span>. i.e. powers of <span class="math inline">\(x\)</span> up to 9. This is pretty high, and may introduce significant floating point rounding errors. We would prefer to keep the power of <span class="math inline">\(x\)</span> lower!</p>
 <p>In the ZX Spectrum, a slightly different formulation of the Chebyshev polynomials is used, called the Shifted Chebyshev Polynomial.</p>
 </div>
@@ -412,7 +412,7 @@ max_error</code></pre>
 </div>
 <div id="end-notes" class="section level3">
 <h3>End Notes</h3>
-<p>There is more information about the exact method used by teh ZX Spectrum in the fantastic (but totally out of print) book by Logan and O’Hara. You can get a copy for peanuts on Ebay!</p>
+<p>There is more information about the exact method used by the ZX Spectrum in the fantastic (but totally out of print) book by Logan and O’Hara. You can get a copy for peanuts on Ebay.</p>
 <p><br>
 <img src="../../../../images/rom_book.png" alt="image_medium" /></p>
 </div>

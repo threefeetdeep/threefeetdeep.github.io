@@ -1,0 +1,53 @@
+---
+title: this is a bit random
+author: Oli Baliey
+date: '2021-04-05'
+slug: this-is-a-bit-random
+categories:
+  - electronics
+tags:
+  - electronics
+---
+<br>
+![image_medium](../../../../images/random_table.png)
+
+## Randomness in the electronic age
+A short essay on randomness in the modern age:
+why we need/use it
+how we generate it
+
+## How can you tell if something is *really*  random?
+Randomness essentially means "no pattern" or predictability
+Randomness is not just uniform
+Diehard tests - runs, monkey, birthday spacings
+TestU01
+
+
+## 'Pseudo-random' is usually random enough
+Good enough for many things. 
+Cryptograhically secure
+
+## Software as a source of randomness
+
+### Cyclical sequences and modular arithmetic
+
+### The Mersenne Twister
+Brief background
+Very common across operating systems and applications
+
+
+## Hardware as a source of randomness
+Most common real random is thermal noise
+
+### Linear feedback shift register
+For PRNGs
+
+### Thermal noise
+e.g. MEM, diode noise,
+
+### Other sources of real world chaos
+Light (ERNIE 5)
+Lavalamps to fishtanks, chaotic systems
+
+## Randomness and quantum computing
+

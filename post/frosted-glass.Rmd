@@ -1,0 +1,355 @@
+---
+title: frosted glass
+author: ojaybee
+date: '2021-01-20'
+slug: frosted-glass
+categories:
+  - datascience
+tags:
+  - logistic regression
+---
+<br>
+![image_medium](../../../../images/frosty_windscreen.png)
+<br>
+
+
+## Please tell me when to cover my car
+Wouldn't it be nice if there was a smartphone app that alerted me the evening before a potentially frosty morning, to prompt me to go and put the covers on the car windscreen, saving me checking the forecast each day?
+
+There wasn't so I thought I would have a go myself. I had previously written a very basic Hello World! app for Android, just to see what it involved, but this article is only about the heart of this app, the prediction model.
+
+## Different ways to predict frosty mornings
+Obviously, the best way is to get a weather forecast for the coming morning, and see if the forecasted conditions look right for frost to form on car windscreens. 
+
+### The simplest way: is it going to be sub-zero?!
+We all know the freezing point of water is 0 degrees Celsius, so the app could just alert the user if the forecast is for a sub-zero air temperature for the next morning. As we shall see, the accuracy of this method can be very poor.
+
+
+## I did it my way: Logistic Regression with Online Learning
+I plumped for a logistic regression: feed in some variables from the forecast like air temperature, cloud cover, precipitation, wind speed and so one and out pops a probability of frost. If it's over 0.5, then I should be alerted to go and cover the car. We would expect air temperature to be one of the most significant variables in our model.
+
+### Micro-climates mainly affecting temperature
+But what if I live on the top of a barren hill, or right by the sea or a lake, or a tarmac-heavy urban area? Then the forecast temperature for my general area might not be so representative of the immediate area where my car is. To handle this, I want the app to allow the logistic regression coefficients to be 'tweaked' over the days and months of using the app, so that the model more closely fits the observed frosty mornings where I live: in other words, 'online learning'.
+
+### Feedback: tell the app when it was wrong
+In my app, the user would have the option to tell the app if a prediction was wrong, i.e. it told me to cover the car, but it wasn't actually frosty, or vice-versa. A wrong prediction could arise for two reasons:
+
+* The forecast used to make the prediction the evening before was wrong!
+* The local climate where I live is "offset" from the general prediction for the reasons above.
+
+There is nothing we can do about the forecast accuracy, other than assume that in the long run, the 'expected' forecast matches the reality. For there being a fairly constant, 'offset' between the average forecast temperature and the locality of your car, we can account for this in the online learning by tweaking the logistic regression coefficients.
+
+
+## Collecting the data
+First, I needed some labeled data with which to train my logistic regression model. For this I set up a Raspberry Pi to record a weather forecast at 8pm each evening using a crontab, abd a forecast retrieved from the DarkSky website, appended to a weather log on the Pi:
+
+```{bash crontab, eval=FALSE}
+# the URL of the darksky website; hourly forecast for bagshot
+darksky_url= "https://api.darksky.net/forecast/**********/
+51.4160,0.7540/?exclude=currently,minutely,daily,alerts,flags&units=si"
+
+# crontab gets daily forecast and appends to log
+0 20 * * *  date >> "~/weather.log"; curl $darksky_url >> "~/weather.log"; 
+```
+
+Everyday, I made a note of whether my car windscreen was frosted over, from 8th October 2020 to 20th January 2021. Over that period of *80* days through autumn and early winter, I saw *13* mornings with frost on my car. This is my data set.
+
+### Pruning the data
+Initially, I kept the forecast data for each day from midnight till 8am, but then decided I would only use the forecast values for 8am, under the working assumption that the conditions in the morning e.g at 8am, have the most bearing or influence on any frost formation than the weather at midnight. This data set is loaded below.
+
+```{r test_load_data, warning=F, message=F}
+library(tidyverse)
+input_data = read.csv(file="../../static/data/input_data.csv", 
+                          header = T,
+                          sep = ",",
+                          colClasses=c("character","integer","integer","numeric",
+                                       "numeric", "numeric", "numeric",
+                                       "numeric", "numeric", "numeric",
+                                       "numeric", "numeric")
+                                       )
+set.seed(1)
+sample_n(tbl=input_data[c(1:2,4:12)], size=4)
+```
+The columns are:
+
+* `hr` is the hour, 8am each morning, from the forecast taken at 8pm the night before
+* `te` air temperature in degrees Celsius
+* `dp` dew point in degrees Celsius
+* `rh` relative humidity, 0 to 1
+* `cc` cloud cover, 0 (clear) to 1 (completely overcast)
+* `ws` wind speed in m/s
+* `pr` air pressure, Hecto-pascals
+* `pi` precipitation amount, mm per hour
+* `pp` precipitation probability, 0 to 1
+* `Y`  target variable, 0 (it wasn't a frosty morning), 1 (it was a frosty morning)
+
+The sample in the table above shows what we might expect. In the first row, the temperature is sub-zero, there is no rain, the wind is light, and my car was frosty, i.e. `Y=1`. In the other rows, the temperature is above zero, there was some rain, and it was more windy. Consequently, these rows were frost free (`Y=0`).
+
+
+## Baseline: Predicting frost using only temperature
+As mentioned above, the simplest, most naive way to predict a frosty windscreen would be to use only the temperature. If below zero, predict frost, otherwise not! Mathematically, we predict Y as
+
+$Y = H(te)$
+
+where $H(te)$ is the Heaviside step function - simply $H(te)=1$ if $te > 0$, and $H(te)=0$ if $te < 0$.
+
+Let's see what accuracy this achieves on the whole dataset. Note, this method needs no prior data for "training" or developing parameters, so we can just go ahead and use the whole lot for prediction...
+
+```{r simplest_model, echo=TRUE, message=FALSE, warning=FALSE}
+library(caret) # for confusion matrix
+c = confusionMatrix(factor((input_data$te<0)*1, levels=c(1,0)),
+                   factor(input_data$Y, levels=c(1,0)))
+c$table
+```
+
+Out of the 13 actual frosty mornings, using this simplest of methods correctly predicted only two of them. In the other direction, of 67 mornings without frost, this method predicted 65 correctly.
+
+The accuracy, true positive rate (sensitivity) and false positive rate (specificity) are:
+
+```{r echo=FALSE}
+c$overall[1]
+c$byClass[1]
+c$byClass[2]
+```
+The true positive rate is dire - at this rate, our app would hardly ever tell me to put the covers on the car!
+
+## Can we do better with a logistic regression?
+I am hoping that a logistic regression can do better than this! But to test this idea, we will need to split the input data in to training and testing sets, since we must fit our logistic regression to the "seen" training data, and test the effectiveness on the "unseen" test data. We'll split the data 50/50 between test and training sets:
+
+```{r, test_train_split, message=F, warning=F}
+# split test train (until both have min three Y=1 rows)
+set.seed(8)
+inTrain <- sample(x= 1:nrow(input_data), size=40,replace = F)
+train_data <- input_data[inTrain,]
+test_data <- input_data[-inTrain,]
+
+# check equal-ish frosty days in each set
+sum(train_data$Y==1)
+sum(test_data$Y==1)
+```
+
+### Fitting the first model
+Now let's fit a logistic regression on the training data, using R's built in `glm()` function. The independent variables we'll use are temperature, dew point, relative humidity, cloud cover, wind speed for now. I'm hoping these features are enough, without using the precipitation or air pressure data, as I want to keep the model fairly simple...
+
+```{r}
+log_reg_model <- glm(Y ~ te + dp + rh + cc + ws,
+                family=binomial(link='logit'),
+                data=train_data)
+
+summary(log_reg_model)
+```
+
+### Testing the model on unseen data in the test set
+
+```{r}
+prediction <- predict.glm(log_reg_model, newdata=test_data, type="response")
+```
+```{r echo=FALSE}
+t = confusionMatrix(factor(1*(prediction>0.5), levels=c(1,0)),
+                    factor(test_data$Y, levels=c(1,0)))
+t$table
+t$overall[1]
+t$byClass[1]
+t$byClass[2]
+```
+
+The sensitivity is still terrible: of the seven frosty mornings in the test set, this regression only predicted two of them! Specificity, or the false negative rate is still pretty good at about 97% as it was before. 
+
+
+### Testing using all data with unchanged regression coefficients
+If we test using the whole data set, half of which set the logistic regression coefficients, half of which is unseen:
+
+```{r}
+prediction <- predict.glm(log_reg_model, newdata=input_data, type="response")
+```
+```{r echo=FALSE}
+t = confusionMatrix(factor((prediction>0.5)*1, levels=c(1,0)),
+                    factor(input_data$Y, levels=c(1,0)))
+t$table
+t$overall[1]
+t$byClass[1]
+t$byClass[2]
+```
+
+The true positive rate improves a little from about 29% to 46%, but this is still to poor to make use of in an app!
+
+## Online Learning to the rescue?
+What if we use the test set to "nudge" the regression in the right direction by slightly changing the regression coefficients occasionally when we make an incorrect prediction?
+
+Imagine that the forty days worth of test data arrives one day at a time, and each time, we get the change to tell the model whether the prediction was right or wrong. You would hope that pretty soon, after a few incorrect predictions the model could be altered to start predicting correctly more often. Let's spell this out more concretely.
+
+### My first online learning algorithm
+We've trained an initial logistic regression model on some training data. It's not great at predicting frosty mornings, but better at predicting when it won't be!
+
+Now the user starts using the app. The steps taken by the app are:
+
+* get a forecast for 8am tomorrow morning
+* make a prediction (Frosty, Y=1 / Not Frosty, Y=0) using the current model
+* find out from the user if we predicted incorrectly (hopefully not to often!)
+* if actual was same as predicted, we can leave the current model unchanged 
+* if actual was different, we can update the model parameters (i.e. $b_0 + b_1x_1 + b_2x_2...$)
+  
+  To do this update to each of the $n$ parameters $b_j$ with the new data pair $(x,Y)$ where $x$ is the forecast data and $Y$ is the actual outcome, we use this reassignment of each parameter $b$:
+  
+\begin{equation}
+\tag{1}
+b_j := b_j - \alpha (h_b(x)- Y)x_j  \: \: \text{where }j=0,1,...,n
+\end{equation}
+
+\begin{equation}
+\tag{2}
+h_b(x) = \frac{1}{1+e^{-bx}}
+\end{equation}
+
+
+$h_b(x)$ is the probability returned by the logistic regression model before the parameter update, and $\alpha$ is the learning rate, between 0 and 1. The closer to 1, the faster the model will adapt to our new data for Y. If $\alpha$ is 0, the parameters are left unchanged.
+
+### Online Learning in action
+
+Let's feed the test data in to the regression a day at a time until it makes an incorrect prediction:
+
+```{r}
+predict_until_incorrect <- function(start_day) {
+  incorrect <- F
+  day_count <- start_day
+  
+  while (incorrect == F & day_count < 41) {
+    prediction <- predict.glm(log_reg_model, 
+                              newdata=test_data[day_count,], 
+                              type="response")
+    # if prediction doesn't match reality, stop
+    if ( (prediction < 0.5 & test_data[day_count,]$Y == 1) |
+         (prediction > 0.5 & test_data[day_count,]$Y == 0)) {
+        incorrect <- T
+    } 
+    # go to next day
+      day_count <- day_count + 1
+  }
+  
+  # which day did we stop on? or return 999 if end of data
+  ifelse(day_count < 41, day_count - 1 , 999)
+}
+
+# returns the day number of the next incorrect prediction
+predict_until_incorrect(1)
+```
+
+```{r}
+# what was the prediction vs actual for that day?
+(prediction <- as.numeric(predict.glm(log_reg_model, 
+                       newdata=test_data[12,],
+                       type="response")))
+test_data[12,]$Y
+```
+
+So, on the twelfth day into our test set, the model made a wrong prediction of "not frosty" with probability 0.182, when it was in fact frosty (Y=1). Updating the regression parameters then:
+
+```{r}
+# back up the parameters
+original_params <- log_reg_model$coefficients
+
+# these are the ones we will adjust
+params <- original_params
+
+# moderately low learning rate, don't want to change things dramatically...
+alpha <- 0.05
+
+# It should have predicted Y=1, i.e. frosty
+Y <- 1
+# day of incorrect prediction
+x  <- test_data[12,]
+hbx <- prediction  
+
+# change x to include intercept and only terms of interest (te,dp,rh,cc...)
+x <- c(1,x[4:8])
+
+
+# use Eqn 1 to update parameters
+for (j in 1:length(params)) {
+  params[[j]] <-  params[[j]] - alpha*(hbx - Y)*x[[j]]  
+}
+
+original_params
+params
+
+# store these back in model
+log_reg_model$coefficients <- params
+```
+
+Above, you can see the coefficients or parameters $b$ of the logistic regression have adjusted slightly.
+
+### After adjustment, would the 12th day have been predicted correctly?
+If we make a prediction again for the 12th day, in our test data set, but this time with the updated parameters, do the
+
+```{r}
+as.numeric((prediction <- predict.glm(log_reg_model, 
+                            newdata=test_data[12,], 
+                            type="response")))
+```
+The prediction for that twelfth day is a probability of greater than 0.5, so frost would correctly be predicted. But have the updates improved matters for the remaining, as yet unseen, days ahead in the test set?
+
+```{r}
+(next_incorrect_day <- predict_until_incorrect(start_day = 13))
+
+as.numeric((prediction <- predict.glm(log_reg_model, 
+                            newdata=test_data[next_incorrect_day,], 
+                            type="response")))
+test_data[next_incorrect_day,]$Y
+```
+This time, we only make it till the next day, the 13th in the test set before making another incorrect prediction... 
+
+## Test Set with parameter tweaking on each incorrect prediction
+There are forty days in the test set, let's just go ahead and run some predictions on the whole test set using the parameter updating each time we make an incorrect prediction, and see how the model performs!
+
+```{r}
+# reset the regression model back to the original 'untweaked' parameters
+log_reg_model$coefficients <- original_params
+
+# function to return predicted prob of frost on given day
+get_prediction <- function(day) {
+   as.numeric(predict.glm(log_reg_model, 
+                         newdata=test_data[day,],
+                         type="response"))
+}
+
+# function to perform the parameter updates
+update_params <- function(wrongly_predicted_day, alpha=0.05) {
+  x <- test_data[wrongly_predicted_day,]
+  Y <- test_data[wrongly_predicted_day,]$Y
+  hbx <- get_prediction(day_count)
+  
+  # change x to include intercept and only terms of interest (te,dp,rh,cc,ws)
+  x <- c(1,x[4:8])
+  
+  # update parameters
+  params <- log_reg_model$coefficients
+  
+  for (j in 1:length(params)) {
+    params[[j]] <-  params[[j]] - alpha*(hbx - Y)*x[[j]]  
+  }
+  return (params)
+}
+
+
+# loop through test set, updating parameters each time we make a wrong prediction
+day_count <- 1
+
+while (day_count < 41) {
+  day_count <- predict_until_incorrect(day_count)
+  if (day_count  < 41) {
+    cat("incorrect prediction at day ", day_count,
+        "; truth=",test_data[day_count,]$Y,
+        ", predicted=", get_prediction(day_count), "\n") 
+    log_reg_model$coefficients <- update_params(day_count, alpha = 0.05)
+  }
+  day_count <- day_count + 1
+}
+```
+We see that over the 40 days in the test set, seven errors were made, four of which were "false negatives", i.e failing to alert the user to cover their car when it did turn out to be frosty. 
+
+Sadly, this means out of the seven frosty days in the test set, only three were correctly predicted, giving a slight increase over the test set from 28.6% to 42.8% true positive rate. This disappointingly turns out to be true for any $\alpha$ greater than about 0.03 used in the update loop above!
+
+
+## Summary
+It remains to be seen how much more the model predictions would improve, if at all, with more real-world observations fed in to the update loop. As a user, I would get pretty annoyed if more than say 1 in 10 predictions were incorrect either way, i.e. anything less than 90% specificity and sensitivity, which we have achieved for specificity, but are a long way off for sensitivity!
+

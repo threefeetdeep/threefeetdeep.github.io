@@ -1,0 +1,34 @@
+---
+title: teach your computer to play pong
+author: Oli Bailey
+date: '2021-03-18'
+slug: teach-your-computer-to-play-pong
+categories:
+  - datascience
+tags:
+  - learning
+---
+<br>
+<video width="420" height="300" controls>
+  <source src="../../../../videos/pong_snippet_video.mp4" type="video/mp4">
+Oh dear! Your browser does not support the video tag.
+</video>
+
+## My first foray into reinforcement learning
+
+## Reward, or carrot and stick
+
+
+<br>
+![image_medium](../../../../images/pong/the_loop.png)
+
+<br>
+![image_medium](../../../../images/pong/state_variables.png)
+
+<br>
+![image_medium](../../../../images/pong/pong1.png)
+
+## References
+
+https://github.com/python-engineer/snake-ai-pytorch
+https://www.youtube.com/watch?v=PJl4iabBEz0&list=RDCMUCbXgNpp0jedKWcQiULLbDTA&index=2

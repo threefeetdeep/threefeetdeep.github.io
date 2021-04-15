@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>logistic regression on ThreeFeetDeep</title>
+    <link>/tags/logistic-regression/</link>
+    <description>Recent content in logistic regression on ThreeFeetDeep</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/logistic-regression/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>frosted glass</title>
+      <link>/2021/01/20/frosted-glass/</link>
+      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/01/20/frosted-glass/</guid>
+      <description>Please tell me when to cover my carWouldn’t it be nice if there was a smartphone app that alerted me the evening before a potentially frosty morning, to prompt me to go and put the covers on the car windscreen, saving me checking the forecast each day?
+There wasn’t so I thought I would have a go myself. I had previously written a very basic Hello World!</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -348,7 +348,7 @@ for (i in 1:3) {
 max_error
 
 ```
-We see the error rapidly reduce, from about 7000ppm (or 0.7%) with three odd numbered coefficients ($T_1(x), T_3(x), T_5(x)$) down to about 6ppm (0.0006%) with five!
+We see the error rapidly reduce, from about 7000ppm (or 0.7%) with three odd numbered coefficients ($T_1(x), T_3(x), T_5(x)$) down to about 6ppm (0.0006%) with five.
 
 Can we do better though? One issue with the approximation derived above is that it needs polynommials $T_1(x), T_3(x), T_5(x), T_7(x)$ and $T_9(x)$. i.e. powers of $x$ up to 9. This is pretty high, and may introduce significant floating point rounding errors. We would prefer to keep the power of $x$ lower!
 
@@ -419,7 +419,7 @@ The maximum error is about 170ppm (or 0.017%). This is a lot higher than our app
 
 
 ### End Notes
-There is more information about the exact method used by teh ZX Spectrum in the fantastic (but totally out of print) book by Logan and O'Hara. You can get a copy for peanuts on Ebay!
+There is more information about the exact method used by the ZX Spectrum in the fantastic (but totally out of print) book by Logan and O'Hara. You can get a copy for peanuts on Ebay.
 
 <br>
 ![image_medium](../../../../images/rom_book.png)

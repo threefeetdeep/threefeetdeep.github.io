@@ -6,7 +6,26 @@
     <description>Recent content in datascience on ThreeFeetDeep</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 22 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/datascience/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 18 Mar 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/datascience/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>teach your computer to play pong</title>
+      <link>/2021/03/18/teach-your-computer-to-play-pong/</link>
+      <pubDate>Thu, 18 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/03/18/teach-your-computer-to-play-pong/</guid>
+      <description>Oh dear! Your browser does not support the video tag.</description>
+    </item>
+    
+    <item>
+      <title>frosted glass</title>
+      <link>/2021/01/20/frosted-glass/</link>
+      <pubDate>Wed, 20 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/2021/01/20/frosted-glass/</guid>
+      <description>Please tell me when to cover my carWouldn’t it be nice if there was a smartphone app that alerted me the evening before a potentially frosty morning, to prompt me to go and put the covers on the car windscreen, saving me checking the forecast each day?
+There wasn’t so I thought I would have a go myself. I had previously written a very basic Hello World!</description>
+    </item>
+    
     <item>
       <title>my datascience capstone project submission</title>
       <link>/2020/09/22/my-datascience-capstone-project-submission/</link>
