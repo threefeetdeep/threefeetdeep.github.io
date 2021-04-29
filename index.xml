@@ -25,7 +25,9 @@
       <pubDate>Thu, 18 Mar 2021 00:00:00 +0000</pubDate>
       
       <guid>/2021/03/18/teach-your-computer-to-play-pong/</guid>
-      <description>Oh dear! Your browser does not support the video tag.</description>
+      <description>My first foray into reinforcement learningSupervised and unsupervised learning are the backbone of today’s machine learning solutions, but reinforcement learning is the technique that makes you envisage androids, Terminator, Skynet, and the rise of the machines!
+One of the “Hello World!” toy examples in reinforcement learning is to teach an computer ‘agent’ to play pong from scratch, in this case in a Python script.
+Reward, or carrot and stickReinforcement learning uses principles similar to those that we might use when we humans learn.</description>
     </item>
     
     <item>
