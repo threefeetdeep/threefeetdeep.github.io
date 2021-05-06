@@ -6,19 +6,7 @@
     <description>Recent content in electronics on ThreeFeetDeep</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 05 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/electronics/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>this is a bit random</title>
-      <link>/2021/04/05/this-is-a-bit-random/</link>
-      <pubDate>Mon, 05 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/2021/04/05/this-is-a-bit-random/</guid>
-      <description>Randomness in the electronic ageA short essay on randomness in the modern age:why we need/use ithow we generate it
-How can you tell if something is really random?Randomness essentially means “no pattern” or predictabilityRandomness is not just uniformDiehard tests - runs, monkey, birthday spacingsTestU01
-‘Pseudo-random’ is usually random enoughGood enough for many things.Cryptograhically secure
-Software as a source of randomnessCyclical sequences and modular arithmeticThe Mersenne TwisterBrief backgroundVery common across operating systems and applications</description>
-    </item>
-    
+    <lastBuildDate>Wed, 23 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/electronics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>let there be light!</title>
       <link>/2020/09/23/let-there-be-light/</link>

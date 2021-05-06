@@ -62,7 +62,7 @@ a {
 
 code {
   background-color: rgba(0, 0, 0, 0.02);
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .fs18 {
@@ -287,7 +287,7 @@ code {
   margin-left: 2px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 500px) {
   .header {
     padding: 25px 0;
   }
@@ -309,7 +309,7 @@ code {
   }
 
   .content {
-    font-size: 19px;
+    font-size: 16px;
     line-height: 1.8;
   }
 
@@ -323,7 +323,7 @@ code {
   }
 
   .archive-title {
-    font-size: 38px;
+    font-size: 36px;
   }
 
   .archive-item-date {

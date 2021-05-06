@@ -18,9 +18,9 @@ library(stringr)  # for hex conversion routines
 ## Doing a lot with a little
 The ZX Spectrum played a big part in my childhood, swallowing up whole chunks of time -  hours days weeks at a time - both through gaming, and painstaking programming in assembly language to create incredibly primitive games.
 
-As I got older, and became an electronics engineer, this humble little home computer from the 1980's amazed me over and over as I learned more  and more about its inner workings. The functionality that the ZX Spectrum's creators squeezed out of such a limited number of transistors, both in terms of CPU and memory, and low clock speed (3.154MHz) is simply astounding. 
+As I got older and became an electronics engineer, this humble little home computer from the 1980's amazed me afresh as I learned more and more details about its inner workings. The functionality that the ZX Spectrum's creators squeezed out of such a limited number of transistors, both in terms of CPU and memory, and low clock speed (3.154MHz) is simply astounding. 
 
-A pocket calculator has one job - to do maths -  and has an incredibly specific and customized microchip "brain" for that sole purpose. The ZX spectrum was a low cost, kid's home computer made from a general purpose microprocessor and memory chips, where mathematical manipulation had to be handled with extreme guile and care! It's worth mentioning that the other "beating heart" of the ZX Spectrum is the unsing and mysterious Uncommitted Logic Array (ULA), something documented in a fabulous book by [Chris Smith](http://www.zxdesign.info/book/), but the ULA stays well out of this article about the mathematical magic taking place in the ZX Spectrum ROM!
+A pocket calculator has one job - to do maths -  and has an incredibly specific and customized microchip "brain" for that sole purpose. The ZX spectrum was a low cost, kids' home computer made from a general purpose microprocessor and memory chips, where mathematical manipulation had to be handled with extreme guile and care! It's worth mentioning that the other "beating heart" of the ZX Spectrum is the unsung and mysterious Uncommitted Logic Array (ULA), something documented in a fabulous book by [Chris Smith](http://www.zxdesign.info/book/). However, the ULA is not discussed in this article about the mathematical magic taking place in the ZX Spectrum ROM!
 
 <hr>
 
@@ -32,7 +32,7 @@ The digital, integer-number-crunching heart of the the ZX Spectrum is the 8-bit 
 
 and that is pretty much it! No dedicated floating point unit, no hardware multipliers, no maths co-processor.
  
-So the question is, how does such a simple home computer using a CPU with such basic mathematical abilities perform quite precise floating-point trigonometrical functions like sine, and arctangent?
+So the question is, how did such a simple home computer using a CPU with very basic mathematical abilities perform quite precise floating-point trigonometrical functions like sine, and arctangent?
 
 ## Every byte counts
 The Z80 could address 64kB of memory. The ZX Spectrum has 48kB of RAM. In the remaining 16kB, the ZX Specrum had to cram the entire operating system, which included:
@@ -48,12 +48,12 @@ The Z80 could address 64kB of memory. The ZX Spectrum has 48kB of RAM. In the re
 * arithmetic routines
 * floating point calculator
 
-Every single byte in ROM mattered. This becomes an important consideration when looking at how the humble speccy handled trigonometrical and exponential functions.
+Every single byte in ROM mattered. This becomes an important consideration when looking at how the humble ZX Spectrum handled trigonometrical and exponential functions.
 <hr>
 
 
 ## Floating-point numbers in Spectrum-Land
-It is worth a brief description of how the ZX Spectrum stored floating point numbers in memory. They were stored using five bytes.
+It is worth a brief description of how the ZX Spectrum stored floating point numbers in memory using five bytes each. There's not much point have functions like sine, cosine, log and exp if you can't represent the answer as a decimal number!
 
 Any number (except 0) can be written uniquely as:
 
@@ -64,7 +64,7 @@ In the ZX Spectrum, $mantissa$ is made up of the four bytes $m_1$ to $m_4$, expr
 
 ![image_medium](../../../../images/fractional_binary.gif)
 
-The Spectrum ROM code assumes that the left-most (most-significant) bit of the mantissa would be a one, with a value of 0.5. This allows this bit to be re-purposed to indicate the sign of the number being encoded, with 0 meaning positive, and 1 meaning negative.
+The Spectrum ROM code assumes that the left-most (most-significant) bit of the mantissa would be a one, limiting the mantissa to be between 0.5 and 1.0. This allows this MSB to be re-purposed to indicate the sign of the number being encoded, with 0 meaning positive, and 1 meaning negative.
 
 The mantissa then represents a number between 0.5 and *almost* 1 (in fact, about 0.99999999976716936)
 
@@ -174,7 +174,7 @@ Step forward the Chebyshev Polynomial Series approximation!!
 <br>
 
 ### Chebyshev, the man.
-![](../../../../images/pafnuty.jfif)
+![](../../../../images/pafnuty.jpg)
 
 Pafnuty Chebyshev was a Russian mathematician and all-round mega-brain that died shortly before the twentieth century. He has over a dozen mathematical and mechanics related equations, relations, functions and mechanisms named after him. Of particular interest in this article are Chebyshev Polynomials, specifically "of the first kind". 
 
@@ -228,7 +228,7 @@ The first five polynomials look like this over the range $-1 \leq x \leq +1$:
 <br>
 ![](../../../../images/chebyshev_polynomials_graph.png)
 
-Note that outside this limited range for $x$, these polynomials generally go crazy dissapearing off to extreme values, so we really must stick with them only within our limited range.
+Note that outside this limited range for $x$, these polynomials generally go crazy disappearing off to extreme values, so we really must stick with them only within our limited range.
 
 These polynomials have many interesting properties, but what we care about is that over the range $-1 \leq x \leq +1$, we can very closely approximate *some other* function as a linear combination of the first few Chebyshev polynomials.
 
@@ -248,7 +248,7 @@ Since each $T_n(x)$ is just some polynomial in powers of x, we *could* add up al
 
 $sin(x) \approx a_0x^0 + a_1x^1 + a_2x^2 + ... + a_kx^k = a_0 + a_1x + a_2x^2 + .... + a_kx^k$
 
-However, it is easier just to add upp the Chebyshev polynomials directly, and this is how the ZX Spectrum does it.
+However, it is easier just to add up the Chebyshev polynomials directly, and this is how the ZX Spectrum does it.
 
 Going back a step, and skipping the derivations which you can find else where, the coefficients $A_n$ can be found using:
 
@@ -419,7 +419,7 @@ The maximum error is about 170ppm (or 0.017%). This is a lot higher than our app
 
 
 ### End Notes
-There is more information about the exact method used by the ZX Spectrum in the fantastic (but totally out of print) book by Logan and O'Hara. You can get a copy for peanuts on Ebay.
+There is more information about the exact methods used by the ZX Spectrum to perform mathematical functions in the fantastic (but totally out of print) book by Logan and O'Hara. You can get a copy for peanuts on Ebay.
 
 <br>
 ![image_medium](../../../../images/rom_book.png)
@@ -434,7 +434,7 @@ There is more information about the exact method used by the ZX Spectrum in the 
 
 *  Chapter 24 of the ZX Spectrum [manual](https://worldofspectrum.org/ZXBasicManual/zxmanchap24.html) which covers the floating point and integer number format representation in memory, near the page bottom.
 
-* An [article](https://aip.scitation.org/doi/pdf/10.1063/1.4823278) from "Computers in Physics" 1994 that includes an approximation exmaple for $e^x$
+* An [article](https://aip.scitation.org/doi/pdf/10.1063/1.4823278) from "Computers in Physics" 1994 that includes an approximation example for $e^x$
 
 * The [Wikipedia](https://en.wikipedia.org/wiki/Chebyshev_polynomials) page on Chebyshev Polynomials is a good starting point
 

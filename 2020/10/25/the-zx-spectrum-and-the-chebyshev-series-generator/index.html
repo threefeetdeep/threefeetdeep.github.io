@@ -73,6 +73,7 @@
 
     <div class="article-content">
       
+<script src="/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
 <p><br>
@@ -80,8 +81,8 @@
 <div id="doing-a-lot-with-a-little" class="section level2">
 <h2>Doing a lot with a little</h2>
 <p>The ZX Spectrum played a big part in my childhood, swallowing up whole chunks of time - hours days weeks at a time - both through gaming, and painstaking programming in assembly language to create incredibly primitive games.</p>
-<p>As I got older, and became an electronics engineer, this humble little home computer from the 1980’s amazed me over and over as I learned more and more about its inner workings. The functionality that the ZX Spectrum’s creators squeezed out of such a limited number of transistors, both in terms of CPU and memory, and low clock speed (3.154MHz) is simply astounding.</p>
-<p>A pocket calculator has one job - to do maths - and has an incredibly specific and customized microchip “brain” for that sole purpose. The ZX spectrum was a low cost, kid’s home computer made from a general purpose microprocessor and memory chips, where mathematical manipulation had to be handled with extreme guile and care! It’s worth mentioning that the other “beating heart” of the ZX Spectrum is the unsing and mysterious Uncommitted Logic Array (ULA), something documented in a fabulous book by <a href="http://www.zxdesign.info/book/">Chris Smith</a>, but the ULA stays well out of this article about the mathematical magic taking place in the ZX Spectrum ROM!</p>
+<p>As I got older and became an electronics engineer, this humble little home computer from the 1980’s amazed me afresh as I learned more and more details about its inner workings. The functionality that the ZX Spectrum’s creators squeezed out of such a limited number of transistors, both in terms of CPU and memory, and low clock speed (3.154MHz) is simply astounding.</p>
+<p>A pocket calculator has one job - to do maths - and has an incredibly specific and customized microchip “brain” for that sole purpose. The ZX spectrum was a low cost, kids’ home computer made from a general purpose microprocessor and memory chips, where mathematical manipulation had to be handled with extreme guile and care! It’s worth mentioning that the other “beating heart” of the ZX Spectrum is the unsung and mysterious Uncommitted Logic Array (ULA), something documented in a fabulous book by <a href="http://www.zxdesign.info/book/">Chris Smith</a>. However, the ULA is not discussed in this article about the mathematical magic taking place in the ZX Spectrum ROM!</p>
 <hr>
 </div>
 <div id="z80-putting-the-z-in-zx" class="section level2">
@@ -92,7 +93,7 @@
 <li>multiply or divide 8- or 16-bit integers by powers of 2</li>
 </ul>
 <p>and that is pretty much it! No dedicated floating point unit, no hardware multipliers, no maths co-processor.</p>
-<p>So the question is, how does such a simple home computer using a CPU with such basic mathematical abilities perform quite precise floating-point trigonometrical functions like sine, and arctangent?</p>
+<p>So the question is, how did such a simple home computer using a CPU with very basic mathematical abilities perform quite precise floating-point trigonometrical functions like sine, and arctangent?</p>
 </div>
 <div id="every-byte-counts" class="section level2">
 <h2>Every byte counts</h2>
@@ -109,20 +110,20 @@
 <li>arithmetic routines</li>
 <li>floating point calculator</li>
 </ul>
-Every single byte in ROM mattered. This becomes an important consideration when looking at how the humble speccy handled trigonometrical and exponential functions.
+Every single byte in ROM mattered. This becomes an important consideration when looking at how the humble ZX Spectrum handled trigonometrical and exponential functions.
 <hr>
 </div>
 <div id="floating-point-numbers-in-spectrum-land" class="section level2">
 <h2>Floating-point numbers in Spectrum-Land</h2>
-<p>It is worth a brief description of how the ZX Spectrum stored floating point numbers in memory. They were stored using five bytes.</p>
+<p>It is worth a brief description of how the ZX Spectrum stored floating point numbers in memory using five bytes each. There’s not much point have functions like sine, cosine, log and exp if you can’t represent the answer as a decimal number!</p>
 <p>Any number (except 0) can be written uniquely as:</p>
 <p><span class="math inline">\(\pm mantissa \times 2^{e}\)</span></p>
 <p>In the ZX Spectrum, <span class="math inline">\(mantissa\)</span> is made up of the four bytes <span class="math inline">\(m_1\)</span> to <span class="math inline">\(m_4\)</span>, expressed as a fractional integer, as illustrated here using only four bits after the decimal point The ZX Spectrum uses 32 bits.</p>
 <div class="figure">
-<img src="../../../../images/fractional_binary.gif" alt="image_medium" />
+<img src="../../../../images/fractional_binary.gif" alt="" />
 <p class="caption">image_medium</p>
 </div>
-<p>The Spectrum ROM code assumes that the left-most (most-significant) bit of the mantissa would be a one, with a value of 0.5. This allows this bit to be re-purposed to indicate the sign of the number being encoded, with 0 meaning positive, and 1 meaning negative.</p>
+<p>The Spectrum ROM code assumes that the left-most (most-significant) bit of the mantissa would be a one, limiting the mantissa to be between 0.5 and 1.0. This allows this MSB to be re-purposed to indicate the sign of the number being encoded, with 0 meaning positive, and 1 meaning negative.</p>
 <p>The mantissa then represents a number between 0.5 and <em>almost</em> 1 (in fact, about 0.99999999976716936)</p>
 <p>The exponent <span class="math inline">\(e\)</span> in the Spectrum implementation uses one byte to represent an integer exponent in the range -127 to +127, stored by subtracting <span class="math inline">\(e\)</span> from 128 (hex <code>80</code>).</p>
 <p>These five bytes are stored in the Spectrum memory in this form:</p>
@@ -254,7 +255,7 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 <p><br></p>
 <div id="chebyshev-the-man." class="section level3">
 <h3>Chebyshev, the man.</h3>
-<p><embed src="../../../../images/pafnuty.jfif" /></p>
+<p><img src="../../../../images/pafnuty.jpg" /></p>
 <p>Pafnuty Chebyshev was a Russian mathematician and all-round mega-brain that died shortly before the twentieth century. He has over a dozen mathematical and mechanics related equations, relations, functions and mechanisms named after him. Of particular interest in this article are Chebyshev Polynomials, specifically “of the first kind”.</p>
 <p>The mathematics get’s a bit heavy, so I’ll leave it as a study exercise for the interested reader. There are some well-written resources in the references at the end of this article. Here, we’ll just stick to how a truncated series of these polynomials can be used to finely approximate functions like <strong>EXP</strong>, <strong>LN</strong>, <strong>SIN</strong> and <strong>ARCTAN</strong>, allowing the little Speccy to crunch the numbers and allow young programmers like I was to write BASIC programs that drew fractals, circles, ellipses and solve maths homework.</p>
 <p><br></p>
@@ -279,7 +280,7 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 <p>The first five polynomials look like this over the range <span class="math inline">\(-1 \leq x \leq +1\)</span>:
 <br>
 <img src="../../../../images/chebyshev_polynomials_graph.png" /></p>
-<p>Note that outside this limited range for <span class="math inline">\(x\)</span>, these polynomials generally go crazy dissapearing off to extreme values, so we really must stick with them only within our limited range.</p>
+<p>Note that outside this limited range for <span class="math inline">\(x\)</span>, these polynomials generally go crazy disappearing off to extreme values, so we really must stick with them only within our limited range.</p>
 <p>These polynomials have many interesting properties, but what we care about is that over the range <span class="math inline">\(-1 \leq x \leq +1\)</span>, we can very closely approximate <em>some other</em> function as a linear combination of the first few Chebyshev polynomials.</p>
 <p>To put this another way, by adding together certain scaled “amounts” of the first few polynomials, we get an overall function that looks a lot like, say, the <strong>SIN</strong> function for example. To express this mathematically:</p>
 <p><span class="math inline">\(f(x) \approx \sum_{n=0}^{n=k-1}A_nT_n(x)\)</span></p>
@@ -289,7 +290,7 @@ Every single byte in ROM mattered. This becomes an important consideration when 
 <p><span class="math inline">\(sin(x) \approx A_0T_0(x) + ... + A_kT_k(x)\)</span></p>
 <p>Since each <span class="math inline">\(T_n(x)\)</span> is just some polynomial in powers of x, we <em>could</em> add up all the “amounts” of each power of x, and end up with coefficients, say <span class="math inline">\(a\)</span>:</p>
 <p><span class="math inline">\(sin(x) \approx a_0x^0 + a_1x^1 + a_2x^2 + ... + a_kx^k = a_0 + a_1x + a_2x^2 + .... + a_kx^k\)</span></p>
-<p>However, it is easier just to add upp the Chebyshev polynomials directly, and this is how the ZX Spectrum does it.</p>
+<p>However, it is easier just to add up the Chebyshev polynomials directly, and this is how the ZX Spectrum does it.</p>
 <p>Going back a step, and skipping the derivations which you can find else where, the coefficients <span class="math inline">\(A_n\)</span> can be found using:</p>
 <p><span class="math inline">\(A_0 = \large \frac{1}{\pi} \large \int_{-1}^{+1} \large \frac{f(x)dx}{\sqrt(1-x^2)}\)</span></p>
 <p>and for <span class="math inline">\(n=1,2,3...k\)</span> as</p>
@@ -412,7 +413,7 @@ max_error</code></pre>
 </div>
 <div id="end-notes" class="section level3">
 <h3>End Notes</h3>
-<p>There is more information about the exact method used by the ZX Spectrum in the fantastic (but totally out of print) book by Logan and O’Hara. You can get a copy for peanuts on Ebay.</p>
+<p>There is more information about the exact methods used by the ZX Spectrum to perform mathematical functions in the fantastic (but totally out of print) book by Logan and O’Hara. You can get a copy for peanuts on Ebay.</p>
 <p><br>
 <img src="../../../../images/rom_book.png" alt="image_medium" /></p>
 </div>
@@ -422,7 +423,7 @@ max_error</code></pre>
 <li><p>The disassembled ZX Spectrum ROM can be found <a href="https://skoolkid.github.io/rom/">here</a></p></li>
 <li><p>A Z80 CPU datasheet can be found <a href="http://www.zilog.com/docs/z80/um0080.pdf">here</a></p></li>
 <li><p>Chapter 24 of the ZX Spectrum <a href="https://worldofspectrum.org/ZXBasicManual/zxmanchap24.html">manual</a> which covers the floating point and integer number format representation in memory, near the page bottom.</p></li>
-<li><p>An <a href="https://aip.scitation.org/doi/pdf/10.1063/1.4823278">article</a> from “Computers in Physics” 1994 that includes an approximation exmaple for <span class="math inline">\(e^x\)</span></p></li>
+<li><p>An <a href="https://aip.scitation.org/doi/pdf/10.1063/1.4823278">article</a> from “Computers in Physics” 1994 that includes an approximation example for <span class="math inline">\(e^x\)</span></p></li>
 <li><p>The <a href="https://en.wikipedia.org/wiki/Chebyshev_polynomials">Wikipedia</a> page on Chebyshev Polynomials is a good starting point</p></li>
 <li><p>A very interesting <a href="https://www.embeddedrelated.com/showarticle/152.php">article</a> about using the Chebyshev approximation in CPU-power constrained embedded systems</p></li>
 </ul>
